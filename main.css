@@ -1,0 +1,65 @@
+*{
+    border: 1px solid red;
+}
+
+#overallbackground {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    border: 2px solid green;
+    height: 700px;
+}
+
+/* !overall interface of website */
+    #menu {
+        width: 15%;
+        margin: 30px 10px 60px 10px;
+    }
+    #maininterface {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+        width: 70%;
+        margin: 10px;
+        border: 5px solid blueviolet;
+    }
+    #turnorder {
+        width: 15%;
+        margin: 80px 10px 80px 10px;
+    }
+
+/* !game interface */
+#background {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+}
+    div.characters {
+        height: 30%;
+        width: 95%;
+    }
+    #enemyHPcontainer {
+        height: 20px;
+    }
+    #arrowcontainer {
+        height: 20px;
+    }
+    #uiinfo {
+        display: flex;
+        flex-direction: row;
+        width: 95%;
+    }
+        #uiinfo {
+            height: 150px;
+            border: 5px solid cadetblue;
+            
+        }
+            #uicommands {
+                width: 30%;
+            }
+            #uiplayerinfo {
+                width: 70%;
+            }
