@@ -1,7 +1,23 @@
+//! ======== Global Variables ========
+let playerArray = [];
+let monsterArray = [];
+let level = 1;
+let currentPlayer = {};
+let currentTarget = {};
+
+// ! ======== Math Stuff ========
+
+const rng = (x) => {
+    return Math.floor(Math.random()*x)
+}
+
+const coinFlip = () => {return Math.floor(Math.random()*2)}
+
+// ! ======== Rendering Section ========
 const InitializeRender = () => {
     renderWebsite();
-    renderGameBaseElements();
 }
+
 
 
 // ! -- Render Website elements --
@@ -16,9 +32,23 @@ const renderWebsite = () => {
     $overAllBackground.append($menu).append($mainInterface).append($turnOrder);
 
     $body.append($overAllBackground);
+    //! ---> need to add feature to start at x difficulty here but its not important
+    const $levelInputField = $("<input>").attr("type", "number");
+    const $startButton = $("<button>").on("click", startGame).text("GO!");
+    $mainInterface.append($levelInputField);
+    $mainInterface.append($startButton);
 }
 
 // ! -- Render Game elements --
+const startGame = () => {
+    console.log("Game is starting");
+    $("#maininterface").empty();
+    renderGameBaseElements();
+    playerArray = generatePlayers(level);
+    monsterArray = generateMonsters(level);
+    renderParty();
+    renderMonsters();
+}
 
 const renderGameBaseElements = () => {
     const $mainInterface = $("#maininterface");
@@ -37,13 +67,30 @@ const renderGameBaseElements = () => {
 
 }
 
-// ! ======== Rendering Section ========
+const renderParty = () => {
+    for (x of playerArray) {
+        //* reminder: x is one of the objects in the array
+        console.log(x);
+    }
+}
+
+const renderMonsters = () => {
+    for (x of monsterArray) {
+        //* reminder: x is one of the objects in the array
+        console.log(x);
+    }
+}
+
+const renderUI = () => {
+
+}
+
+// ! ======== Main Section ========
 
 const main = () => {
-    
-    console.log("hi");
-    InitializeRender();
 
+    
+    InitializeRender();
 }
 
 

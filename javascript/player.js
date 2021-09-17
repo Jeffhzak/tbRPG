@@ -25,6 +25,8 @@ class Thief {
     }
 }
 
-let playerArray = [new Warrior, new Mage, new Thief];
-
-console.log(playerArray);
+const generatePlayers = (lvl) => {
+    let playerArray = null;
+    playerArray = [new Warrior(lvl), new Mage(lvl), new Thief(lvl)];
+    return playerArray;
+}
