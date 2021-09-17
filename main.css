@@ -14,6 +14,7 @@
     #menu {
         width: 15%;
         margin: 30px 10px 60px 10px;
+        background-color: cadetblue;
     }
     #maininterface {
         display: flex;
@@ -27,6 +28,7 @@
     #turnorder {
         width: 15%;
         margin: 80px 10px 80px 10px;
+        background-color: cadetblue;
     }
 
 /* !game interface */
@@ -52,14 +54,17 @@
         flex-direction: row;
         width: 95%;
     }
-        #uiinfo {
+        #uicontainer {
+            display: flex;
             height: 150px;
             border: 5px solid cadetblue;
             
         }
             #uicommands {
                 width: 30%;
+                position: relative;
             }
             #uiplayerinfo {
                 width: 70%;
+                position: relative;
             }
