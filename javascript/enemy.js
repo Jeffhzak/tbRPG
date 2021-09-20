@@ -31,10 +31,12 @@ const renderMonsters = () => {
     // target and clear the containers for enemy-related things
     const $enemyContainer = $("#enemycontainer");
     $enemyContainer.empty();
+    const $enemyHpContainer = $("#enemyHPcontainer");
+    $enemyHpContainer.empty();
     // re-render everything enemy related by iterating over the "enemies" object
     for (x in enemies) {
         // render models and names
-        console.log(`enemy console log: ${x}`);
+        // console.log(`enemy console log: ${x}`);
         let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
         enemies[x].displayElement = $newEnemyDiv;
         $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
@@ -45,5 +47,9 @@ const renderMonsters = () => {
           });
         //////////////////////////////////////////////////  
         // render UI elements such as HP bar and current target (?)
+        $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");
+        $newEnemyHpBarFg = $("<div>").attr("class", "healthbarfg").attr("id", `${x}hp`).css("width", `${enemies[x].hp.currentHp/enemies[x].hp.maxHp*100}%`);
+        $newEnemyHpBarBg.append($newEnemyHpBarFg);
+        $enemyHpContainer.append($newEnemyHpBarBg);
     }
 }

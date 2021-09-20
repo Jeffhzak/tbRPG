@@ -2,9 +2,17 @@ class Warrior {
     constructor(lvl = 1) {
         this.name = "Jargo";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(50*lvl/2), maxHp: Math.floor(50*lvl/2)};
+        this.hp = {currentHp: Math.floor(50 * lvl/2), maxHp: Math.floor(50 * lvl/2)};
+        this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
         this.atk = Math.floor(10*lvl/2);
-        this.imgSrc = "images/placeholder.jpg"
+        this.skills = {
+            Attack: () => {console.log(`warrior attacked ${this.atk}`);},
+            "Defend Ally": () => {console.log("warrior defended ally")}
+        }
+    }
+    Attack() {
+        console.log("warrior attacked");
+
     }
 }
 
@@ -13,8 +21,8 @@ class Mage {
         this.name = "Riz";
         this.level = lvl;
         this.hp = {currentHp: Math.floor(40*lvl/2), maxHp: Math.floor(40*lvl/2)};
+        this.mp = {currentMp: Math.floor(50 * Math.sqrt(lvl)), maxMp: Math.floor(50 * Math.sqrt(lvl))};
         this.atk = Math.floor(10*lvl/2);
-        this.imgSrc = "images/placeholder.jpg"
     }
 }
 
@@ -23,8 +31,8 @@ class Thief {
         this.name = "Hood";
         this.level = lvl;
         this.hp = {currentHp: Math.floor(40*lvl/2), maxHp: Math.floor(40*lvl/2)};
+        this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
         this.atk = Math.floor(10*lvl/2);
-        this.imgSrc = "images/placeholder.jpg"
     }
 }
 
@@ -47,7 +55,7 @@ const renderParty = () => {
     // re-render everything player related by iterating over the "players" object
     for (x in players) {
         // render models and names
-        console.log(`player console log: ${x}`);
+        // console.log(`player console log: ${x}`);
         let $newPlayerDiv = $("<div>").attr("class", "playermodel").attr("id", `${x}`);
         players[x].displayElement = $newPlayerDiv; // updates data with linked html element
         $newPlayerDiv.append("<h5>").text(`${players[x].name}`);
@@ -60,9 +68,16 @@ const renderPartyUI = (partymember) => {
     const $uiPlayerInfo = $("#uiplayerinfo");
     const $newPartyMemberDiv = $("<div>").attr("class", "partymemberdiv");
     // render UI elements such as HP, MP and portrait
-    let $newPortrait = $("<img>").attr("alt", `${players[partymember].name}'s portrait'`).attr("src", "images/placeholderimage.jpg").attr("class", "playerportrait").attr("id", `${players[partymember].name}portrait`);
-    $newPartyMemberDiv.append($newPortrait);
+    // Appending Portrait
+    let $newPortraitDiv = $("<div>").attr("class", "playerportrait").attr("id", `${players[partymember].name}portrait`);
+    $newPartyMemberDiv.append($newPortraitDiv);
+    // Appending HP text
     $newPartyMemberDiv.append($("<p5>").text(`HP: ${players[partymember].hp.currentHp}/${players[partymember].hp.maxHp}`));
     $uiPlayerInfo.append($newPartyMemberDiv);
+    // Appending MP text
+    $newPartyMemberDiv.append($("<p5>").text(`MP: ${players[partymember].mp.currentMp}/${players[partymember].mp.maxMp}`));
+    $uiPlayerInfo.append($newPartyMemberDiv);
+    // Appending status box?
+    // -------------------------------------
 
 }

@@ -2,7 +2,7 @@
 // let players = {};
 // let enemies = {};
 let level = 1;
-let currentPlayer = {};
+let currentTurn = {};
 let currentTarget = {};
 
 // ! ======== Math Stuff ========
@@ -48,6 +48,10 @@ const startGame = () => {
     enemies = generateMonsters(level);
     renderParty();
     renderMonsters();
+    renderUI();
+    //? temporary testing scenario
+    currentTurn = players.warrior;
+    currentTarget = enemies.monster1;
 }
 
 const renderGameBaseElements = () => {
@@ -67,11 +71,31 @@ const renderGameBaseElements = () => {
 
 }
 
-
 const renderUI = () => {
+    const $uiCommands = $("#uicommands");
+    const $attackButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsattack").text("Attack").on("click", basicAttack);
+    const $skillButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsskills").text("Skill");
+    const $itemButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsitems").text("Item");
+    const $runButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsrun").text("Run");
+    $uiCommands.append($attackButton);
+    $uiCommands.append($skillButton);
+    $uiCommands.append($itemButton);
+    $uiCommands.append($runButton);
 
 }
 
+const updateGameState = () => {
+    renderParty();
+    renderMonsters();
+}
+
+const basicAttack = () => {
+    console.log(currentTurn["skills"]["Attack"]);
+    console.log(currentTurn.skills.Attack);
+    currentTarget.hp.currentHp -= currentTurn.atk;
+    updateGameState();
+
+}
 // ! ======== Main Section ========
 
 const main = () => {

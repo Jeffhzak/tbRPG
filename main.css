@@ -45,36 +45,105 @@
         width: 95%;
         background-color: lightblue;
     }
+
+    #playercontainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-end;
+    }
         .playermodel {
-            height:10%;
-            width: 10%;
+            height:80%;
+            width: 20%;
             background-color: royalblue;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-end;
         }
+            #warrior {order:2}
+            #mage {order:3}
+            #thief {order:1}
+    
+    #enemycontainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start; 
+    }
         .enemymodel {
-            height:10%;
-            width: 10%;
+            height:80%;
+            width: 20%;
             background-color: orangered;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-end;
         }
+            #enemy1{order:2}
+            #enemy2{order:3}
+            #enemy3{order:1}
+
     #enemyHPcontainer {
         height: 20px;
-        background-color: gainsboro;
+        background-color: white;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-around;
     }
+        .healthbarbg {
+            background-color: darkgray;
+            width: 20%;
+            height: 90%;
+            position: relative;
+        }
+        .healthbarfg {
+            background-color: crimson;
+            width: 100%;
+            height: 90%;
+            position: relative;
+        }
     #arrowcontainer {
         height: 20px;
         background-color: gainsboro;
     }
-    #uiinfo {
-        display: flex;
-        flex-direction: row;
-        width: 95%;
-    }
+/* !User Interface stuff */
+
         #uicontainer {
             display: flex;
-            height: 150px;
+            height: 30vh;
             border: 5px solid cadetblue;
             background-color: gainsboro;
             
         }
+        .uimenu {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            width: 95%;
+            justify-content: space-around;
+        }
+            #uicommands {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+                .uibuttons {
+                    width: 40%;
+                    height: 40%;
+                }
+            .partymemberdiv {
+                height:31%;
+                display: flex;
+                flex-direction: row;
+            }
+            .playerportrait {
+                width: 6vh;
+                height: 6vh;
+                background-color: indigo;
+            }
             #uicommands {
                 width: 30%;
                 position: relative;
