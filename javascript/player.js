@@ -1,3 +1,4 @@
+//! ======= Player related Data =======
 class Warrior {
     constructor(lvl = 1) {
         this.name = "Jargo";
@@ -6,7 +7,11 @@ class Warrior {
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
         this.atk = Math.floor(10*lvl/2);
         this.skills = {
-            Attack: () => {console.log(`warrior attacked ${this.atk}`);},
+            Attack: (e) => {
+                targetUpdate(e);
+                playerSkills.Attack();
+                updateGameState();
+            },
             "Defend Ally": () => {console.log("warrior defended ally")}
         }
     }
@@ -35,6 +40,14 @@ class Thief {
         this.atk = Math.floor(10*lvl/2);
     }
 }
+
+const playerSkills = {
+    Attack: () => {
+        currentTarget.hp.currentHp -= currentTurn.atk;
+    }
+}
+
+//! ======= Player related functions =======
 
 const generatePlayers = (lvl) => {
     let players = null;

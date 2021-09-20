@@ -1,6 +1,7 @@
 //! ======== Global Variables ========
 // let players = {};
 // let enemies = {};
+let difficulty = 1;
 let level = 1;
 let currentTurn = {};
 let currentTarget = {};
@@ -73,10 +74,13 @@ const renderGameBaseElements = () => {
 
 const renderUI = () => {
     const $uiCommands = $("#uicommands");
-    const $attackButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsattack").text("Attack").on("click", basicAttack);
-    const $skillButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsskills").text("Skill");
-    const $itemButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsitems").text("Item");
-    const $runButton = $("<btn>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsrun").text("Run");
+    //! change attack button here
+    //* change attack button here
+    //? change attack button here
+    const $attackButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsattack").text("Attack").on("click", basicAttack);
+    const $skillButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsskills").text("Skill");
+    const $itemButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsitems").text("Item");
+    const $runButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsrun").text("Run");
     $uiCommands.append($attackButton);
     $uiCommands.append($skillButton);
     $uiCommands.append($itemButton);
@@ -84,18 +88,26 @@ const renderUI = () => {
 
 }
 
+// ! ======== Game-State Section ========
+
 const updateGameState = () => {
     renderParty();
     renderMonsters();
 }
+//! ?????????????????????????????????????????????
 
-const basicAttack = () => {
-    console.log(currentTurn["skills"]["Attack"]);
-    console.log(currentTurn.skills.Attack);
-    currentTarget.hp.currentHp -= currentTurn.atk;
-    updateGameState();
-
+const targetUpdate = (e) => {
+    currentTarget = enemies[`${e.target.id}`];
 }
+//! -> I need to make a function that accepts an argument of what skill to fire, but where to get that argument? use the same way I got the currentTarget^ ???
+const basicAttack = () => {
+    for (x in enemies) {
+        $(`#${x}`).on("click", currentTurn.skills.Attack);
+        console.log()
+        $(`#${x}`).toggleClass("infocus");
+    }
+}
+//! ?????????????????????????????????????????????
 // ! ======== Main Section ========
 
 const main = () => {

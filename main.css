@@ -2,6 +2,20 @@
     border: 1px solid red;
 }
 
+button:hover {
+    background-color:orangered;
+}
+
+.infocus {
+    border: 1vh solid #dadada;
+    border-radius: 7px;
+}
+
+.infocus:hover { 
+    outline: none;
+    border-color: #9ecaed;
+}
+
 #overallbackground {
     display:flex;
     flex-direction: row;
@@ -133,6 +147,7 @@
                 .uibuttons {
                     width: 40%;
                     height: 40%;
+                    text-align: center;
                 }
             .partymemberdiv {
                 height:31%;

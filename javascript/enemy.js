@@ -42,9 +42,9 @@ const renderMonsters = () => {
         $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
         $enemyContainer.append($newEnemyDiv);
         ////////////////////////////////////////////////// temp stuff 
-        $newEnemyDiv.on("click", (event) => {
-            console.log(event.target.id);
-          });
+        // $newEnemyDiv.on("click", (event) => {
+        //     console.log(event.target.id);
+        //   });
         //////////////////////////////////////////////////  
         // render UI elements such as HP bar and current target (?)
         $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");
