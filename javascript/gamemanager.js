@@ -1,6 +1,6 @@
 //! ======== Global Variables ========
-let playerArray = [];
-let monsterArray = [];
+// let players = {};
+// let enemies = {};
 let level = 1;
 let currentPlayer = {};
 let currentTarget = {};
@@ -44,8 +44,8 @@ const startGame = () => {
     console.log("Game is starting");
     $("#maininterface").empty();
     renderGameBaseElements();
-    playerArray = generatePlayers(level);
-    monsterArray = generateMonsters(level);
+    players = generatePlayers(level);
+    enemies = generateMonsters(level);
     renderParty();
     renderMonsters();
 }
@@ -67,19 +67,6 @@ const renderGameBaseElements = () => {
 
 }
 
-const renderParty = () => {
-    for (x of playerArray) {
-        //* reminder: x is one of the objects in the array
-        console.log(x);
-    }
-}
-
-const renderMonsters = () => {
-    for (x of monsterArray) {
-        //* reminder: x is one of the objects in the array
-        console.log(x);
-    }
-}
 
 const renderUI = () => {
 

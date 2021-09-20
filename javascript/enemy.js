@@ -18,7 +18,32 @@ let monsterFactory = [
 ]
 
 const generateMonsters = (lvl) => {
-    let monsterArray = null;
-    monsterArray = [new monsterFactory[rng(monsterFactory.length)](lvl), new monsterFactory[rng(monsterFactory.length)](lvl), new monsterFactory[rng(monsterFactory.length)](lvl)]
-    return monsterArray;
+    let enemies = null;
+    enemies = {
+        monster1: new monsterFactory[rng(monsterFactory.length)](lvl),
+        monster2: new monsterFactory[rng(monsterFactory.length)](lvl),
+        monster3: new monsterFactory[rng(monsterFactory.length)](lvl)
+    }
+    return enemies;
+}
+
+const renderMonsters = () => {
+    // target and clear the containers for enemy-related things
+    const $enemyContainer = $("#enemycontainer");
+    $enemyContainer.empty();
+    // re-render everything enemy related by iterating over the "enemies" object
+    for (x in enemies) {
+        // render models and names
+        console.log(`enemy console log: ${x}`);
+        let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
+        enemies[x].displayElement = $newEnemyDiv;
+        $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
+        $enemyContainer.append($newEnemyDiv);
+        ////////////////////////////////////////////////// temp stuff 
+        $newEnemyDiv.on("click", (event) => {
+            console.log(event.target.id);
+          });
+        //////////////////////////////////////////////////  
+        // render UI elements such as HP bar and current target (?)
+    }
 }
