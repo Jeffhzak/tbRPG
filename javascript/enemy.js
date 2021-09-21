@@ -6,9 +6,21 @@ let monsterFactory = [
             this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
             this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
             this.spd = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+            this.target = {};
             this.skills = {
-                "Defend Ally": () => {console.log("warrior defended ally")}
+                "Attack": () => {
+                    currentTarget = this.target;
+                    enemySkills.Attack();
+                },
+                "Bounce": () => {
+                    console.log("The slime splashes around.");
+                },
             };
+
+            this.aiTarget = () => {
+                this.target = randomPlayerTarget();
+            }
+
             this.Attack = (e) => {
                 targetUpdate(e);
                 playerSkills.Attack();
@@ -23,14 +35,26 @@ let monsterFactory = [
             this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
             this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
             this.spd = Math.floor(14 * Math.floor(Math.sqrt(lvl)));
+            this.target = {};
             this.skills = {
-                "Defend Ally": () => {console.log("warrior defended ally")}
+                "Attack": () => {
+                    currentTarget = this.target;
+                    enemySkills.Attack();
+                },
+                "Taunt": () => {
+                    console.log("The goblin laughs at your weakness.");
+                },
             };
-            this.Attack = (e) => {
-                targetUpdate(e);
-                enemySkills.Attack();
-                updateGameState();
-            };
+
+            this.aiTarget = () => {
+                this.target = randomPlayerTarget();
+            }
+
+            // this.Attack = (e) => {
+            //     targetUpdate(e);
+            //     enemySkills.Attack();
+            //     updateGameState();
+            // };
         }
     }
 ]
@@ -51,6 +75,19 @@ const randomPlayerTarget = () => {
         stepTarget = players[Object.keys(players)[i]]
         if (rng1000 <= (step*(i+1))+1) {
             return stepTarget;    
+        }
+    }
+}
+
+const randomMonsterSkill = (currentMonster) => {
+    let rng1000 = Math.floor(Math.random() * 1000);
+    let step = Math.floor(1000 / Object.keys(currentMonster.skills).length);
+    //! cycles through all the monster's skills and decides on one based on what rng1000 rolled
+    for (i=0; i<Object.keys(currentMonster.skills).length; i++) {
+        skillToUse = currentMonster.skills[Object.keys(currentMonster.skills)[i]]
+        if (rng1000 <= (step*(i+1))+1) {
+            skillToUse();
+            return
         }
     }
 }
@@ -84,5 +121,10 @@ const renderMonsters = () => {
         $newEnemyHpBarFg = $("<div>").attr("class", "healthbarfg").attr("id", `${x}hp`).css("width", `${enemies[x].hp.currentHp/enemies[x].hp.maxHp*100}%`);
         $newEnemyHpBarBg.append($newEnemyHpBarFg);
         $enemyHpContainer.append($newEnemyHpBarBg);
+        if (enemies[x].hp.currentHp <= 0) {
+            $newEnemyDiv.addClass("dead");
+            $newEnemyHpBarBg.addClass("dead");
+            $newEnemyHpBarFg.addClass("dead");
+        }
     }
 }

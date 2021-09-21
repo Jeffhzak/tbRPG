@@ -16,6 +16,16 @@ button:hover {
     border-color: #9ecaed;
 }
 
+div.dead {
+    display: none !important;
+}
+
+button {
+    display: flex;
+    justify-content: center;
+
+}
+
 #overallbackground {
     display:flex;
     flex-direction: row;

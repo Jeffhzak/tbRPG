@@ -40,20 +40,23 @@ const renderWebsite = () => {
     $overAllBackground.append($menu).append($mainInterface).append($turnOrder);
 
     $body.append($overAllBackground);
-    //! ---> need to add feature to start at x difficulty here but its not important
-    const $levelInputField = $("<input>").attr("type", "number");
-    const $startButton = $("<button>").on("click", startGame).text("GO!");
-    $mainInterface.append($levelInputField);
+    //! --->  start at x difficulty here
+    const $startButton = $("<button>").on("click", startGame(1)).text("Easy").css("width", "20vh").css("align-self", "center");
+    const $startButton1 = $("<button>").on("click", startGame(3)).text("Normal").css("width", "20vh").css("align-self", "center");
+    const $startButton2 = $("<button>").on("click", startGame(5)).text("Hard").css("width", "20vh").css("align-self", "center");
     $mainInterface.append($startButton);
+    $mainInterface.append($startButton1);
+    $mainInterface.append($startButton2);
 }
 
 // ! -- Render Game elements --
-const startGame = () => {
+const startGame = (diff) => () => {
+    console.log(`current difficulty is set to: ${diff}`);
     console.log("Game is starting");
     $("#maininterface").empty();
     renderGameBaseElements();
     players = generatePlayers(level);
-    enemies = generateMonsters(level);
+    enemies = generateMonsters(diff);
     renderParty();
     renderMonsters();
     renderUI();
@@ -104,19 +107,21 @@ const updateGameState = () => {
 }
 
 const updateTurnOrder = (players, enemies) => {
-    if (turnOrder.length === 0) {
+    if (turnOrder.length === 0) { // if the round isnt over yet...
         for (x in players) {
-            if (players[x].hp.currentHp > 0) {
+            if (players[x].hp.currentHp > 0) { // push players that aren't dead into the turnOrder array
                 turnOrder.push(players[x]);
             }
         }
         for (x in enemies) {
-            if (enemies[x].hp.currentHp > 0) {
+            if (enemies[x].hp.currentHp > 0) {// push monsters that aren't dead into the turnOrder array
                 turnOrder.push(enemies[x]);
+                enemies[x].aiTarget();
+                console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
             }
         }
         //sort turnOrder array by speed, lowest to highest
-        //speed +/- 15%?
+        //speed +/- 15% for some variance
         turnOrder.sort( (a, b) => {
             let moddedSpeedA = randomPercentMod(a.spd, 15);
             let moddedSpeedB = randomPercentMod(b.spd, 15)
@@ -125,12 +130,30 @@ const updateTurnOrder = (players, enemies) => {
             else return 0;
         })
     }
+    // before the next guy can take their turn, check for dead people
+    checkDeaths();
+    // progress turn order
     console.log(turnOrder);
     currentTurn = turnOrder.pop();
+    // if it's the player's turn, highlight them
     if (currentTurn === players.warrior || currentTurn === players.mage || currentTurn === players.thief) {
         $(currentTurn.displayElement).toggleClass("infocus");
+    } else { //! if it's not the player's turn, fire off the monster's turn
+        randomMonsterSkill(currentTurn);
+        updateGameState();
     }
 
+}
+
+const checkDeaths = () => {
+    for (x in turnOrder) {
+        // console.log(`for-in ${x}`);
+        // console.log(turnOrder[x]);
+        if (turnOrder[x].hp.currentHp <= 0) {
+            turnOrder[x].hp.currentHp = 0;
+            turnOrder.splice(x, 1);
+        }
+    }
 }
 //! ?????????????????????????????????????????????
 

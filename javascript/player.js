@@ -87,6 +87,9 @@ const renderParty = () => {
         // render models and names
         let $newPlayerDiv = $("<div>").attr("class", "playermodel").attr("id", `${x}`);
         players[x].displayElement = $newPlayerDiv; // updates data with linked html element
+        if (players[x].hp.currentHp <= 0) {
+            $newPlayerDiv.addClass("dead");
+        }
         $newPlayerDiv.append("<h5>").text(`${players[x].name}`);
         $playerContainer.append($newPlayerDiv);
         renderPartyUI(x);
