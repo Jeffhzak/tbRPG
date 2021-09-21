@@ -1,4 +1,6 @@
 //! ======== Global Variables ========
+//* ======== Global Variables ========
+//? ======== Global Variables ========
 let difficulty = 1;
 let level = 1;
 let currentTurn = {};
@@ -6,6 +8,8 @@ let currentTarget = {};
 let turnOrder = [];
 
 // ! ======== Math Stuff ========
+// * ======== Math Stuff ========
+// ? ======== Math Stuff ========
 
 const rng = (x) => {
     return Math.floor(Math.random()*x)
@@ -22,6 +26,9 @@ const randomPercentMod = (value, mod) => {
 }
 
 // ! ======== Rendering Section ========
+// * ======== Rendering Section ========
+// ? ======== Rendering Section ========
+
 const InitializeRender = () => {
     renderWebsite();
 }
@@ -61,8 +68,7 @@ const startGame = (diff) => () => {
     renderMonsters();
     renderUI();
     updateTurnOrder(players, enemies);
-    //? temporary testing scenario
-    // currentTurn = players.warrior;
+    renderTurnOrder();
 }
 
 const renderGameBaseElements = () => {
@@ -98,12 +104,28 @@ const renderUI = () => {
 
 }
 
+const renderWinState = () => {
+    const $background = $("#background");
+    $background.empty();
+    $background.append($("<h1>").text("YOU WIN!"))
+}
+
+const renderLoseState = () => {
+    const $background = $("#background");
+    $background.empty();
+    $background.append($("<h1>").text("YOU LOSE!"))
+}
+
 // ! ======== Game-State Section ========
+// * ======== Game-State Section ========
+// ? ======== Game-State Section ========
 
 const updateGameState = () => {
     renderParty();
     renderMonsters();
     updateTurnOrder(players, enemies);
+    renderTurnOrder();
+    checkWinState();
 }
 
 const updateTurnOrder = (players, enemies) => {
@@ -145,7 +167,12 @@ const updateTurnOrder = (players, enemies) => {
 
 }
 
+const renderTurnOrder = () => {
+    console.log(turnOrder[0]);
+}
+
 const checkDeaths = () => {
+
     for (x in turnOrder) {
         // console.log(`for-in ${x}`);
         // console.log(turnOrder[x]);
@@ -155,7 +182,29 @@ const checkDeaths = () => {
         }
     }
 }
-//! ?????????????????????????????????????????????
+
+const checkWinState = () => {
+    let enemyDeadCount = 0;
+    let playerDeadCount = 0;
+    for (x in players) {
+        if (players[x].hp.currentHp <= 0) {
+            playerDeadCount++;
+        }
+    }
+    for (x in enemies) {
+        if (enemies[x].hp.currentHp <= 0) {
+            enemyDeadCount++;
+        }
+    }
+    if (playerDeadCount === 3) {
+        console.log("YOU LOSE");
+        renderLoseState();
+    }
+    if (enemyDeadCount === 3) {
+        console.log("YOU WIN");
+        renderWinState();
+    }
+}
 
 const targetUpdate = (e) => {
     currentTarget = enemies[`${e.target.id}`];
@@ -167,8 +216,10 @@ const basicAttack = () => {
         $(`#${x}`).toggleClass("infocus");
     }
 }
-//! ?????????????????????????????????????????????
+
 // ! ======== Main Section ========
+// * ======== Main Section ========
+// ? ======== Main Section ========
 
 const main = () => {
 

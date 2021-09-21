@@ -6,6 +6,10 @@ let monsterFactory = [
             this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
             this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
             this.spd = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+            //! WORK ON RENDERING SPRITESHEET VIA CSS
+            this.background = "url('./images/placeholderimage.jpg') no-repeat -10px -10px";
+            this.backgroundWidth = "";
+            this.backgroundHeight = "";
             this.target = {};
             this.skills = {
                 "Attack": () => {
@@ -66,7 +70,7 @@ const enemySkills = {
         console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
     }
 }
-
+//! !!!!!!!!!!!!!!!!!!!!!! STILL CAN TARGET DEAD PLAYERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const randomPlayerTarget = () => {
     let rng1000 = Math.floor(Math.random() * 1000); 
     let step = Math.floor(1000 / Object.keys(players).length);
@@ -80,14 +84,16 @@ const randomPlayerTarget = () => {
 }
 
 const randomMonsterSkill = (currentMonster) => {
-    let rng1000 = Math.floor(Math.random() * 1000);
-    let step = Math.floor(1000 / Object.keys(currentMonster.skills).length);
-    //! cycles through all the monster's skills and decides on one based on what rng1000 rolled
-    for (i=0; i<Object.keys(currentMonster.skills).length; i++) {
-        skillToUse = currentMonster.skills[Object.keys(currentMonster.skills)[i]]
-        if (rng1000 <= (step*(i+1))+1) {
-            skillToUse();
-            return
+    if (currentMonster != null) {
+        let rng1000 = Math.floor(Math.random() * 1000);
+        let step = Math.floor(1000 / Object.keys(currentMonster.skills).length);
+        //! cycles through all the monster's skills and decides on one based on what rng1000 rolled
+        for (i=0; i<Object.keys(currentMonster.skills).length; i++) {
+            skillToUse = currentMonster.skills[Object.keys(currentMonster.skills)[i]]
+            if (rng1000 <= (step*(i+1))+1) {
+                skillToUse();
+                return
+            }
         }
     }
 }
@@ -112,7 +118,8 @@ const renderMonsters = () => {
     for (x in enemies) {
         // render models and names
         // console.log(`enemy console log: ${x}`);
-        let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
+        //! WORK ON RENDERING SPRITESHEET VIA CSS
+        let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`).css("background", `${enemies[x].background}`);
         enemies[x].displayElement = $newEnemyDiv; // updates data with linked html element
         $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
         $enemyContainer.append($newEnemyDiv);
