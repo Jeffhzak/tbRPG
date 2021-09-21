@@ -1,10 +1,9 @@
 //! ======== Global Variables ========
-// let players = {};
-// let enemies = {};
 let difficulty = 1;
 let level = 1;
 let currentTurn = {};
 let currentTarget = {};
+let turnOrder = [];
 
 // ! ======== Math Stuff ========
 
@@ -12,7 +11,15 @@ const rng = (x) => {
     return Math.floor(Math.random()*x)
 }
 
-const coinFlip = () => {return Math.floor(Math.random()*2)}
+const randomPercentMod = (value, mod) => {
+    let moddedValue = 0;
+    if (Math.random() > 0.5) {
+        moddedValue = Math.floor(value + (value/100 * (Math.random() * mod)));
+    } else {
+        moddedValue = Math.floor(value - (value/100 * (Math.random() * mod)));
+    }
+    return moddedValue;
+}
 
 // ! ======== Rendering Section ========
 const InitializeRender = () => {
@@ -50,9 +57,9 @@ const startGame = () => {
     renderParty();
     renderMonsters();
     renderUI();
+    updateTurnOrder(players, enemies);
     //? temporary testing scenario
-    currentTurn = players.warrior;
-    currentTarget = enemies.monster1;
+    // currentTurn = players.warrior;
 }
 
 const renderGameBaseElements = () => {
@@ -93,6 +100,37 @@ const renderUI = () => {
 const updateGameState = () => {
     renderParty();
     renderMonsters();
+    updateTurnOrder(players, enemies);
+}
+
+const updateTurnOrder = (players, enemies) => {
+    if (turnOrder.length === 0) {
+        for (x in players) {
+            if (players[x].hp.currentHp > 0) {
+                turnOrder.push(players[x]);
+            }
+        }
+        for (x in enemies) {
+            if (enemies[x].hp.currentHp > 0) {
+                turnOrder.push(enemies[x]);
+            }
+        }
+        //sort turnOrder array by speed, lowest to highest
+        //speed +/- 15%?
+        turnOrder.sort( (a, b) => {
+            let moddedSpeedA = randomPercentMod(a.spd, 15);
+            let moddedSpeedB = randomPercentMod(b.spd, 15)
+            if (moddedSpeedA > moddedSpeedB) {return 1}
+            else if (moddedSpeedA < moddedSpeedB) {return -1}
+            else return 0;
+        })
+    }
+    console.log(turnOrder);
+    currentTurn = turnOrder.pop();
+    if (currentTurn === players.warrior || currentTurn === players.mage || currentTurn === players.thief) {
+        $(currentTurn.displayElement).toggleClass("infocus");
+    }
+
 }
 //! ?????????????????????????????????????????????
 
@@ -102,8 +140,7 @@ const targetUpdate = (e) => {
 //! -> I need to make a function that accepts an argument of what skill to fire, but where to get that argument? use the same way I got the currentTarget^ ???
 const basicAttack = () => {
     for (x in enemies) {
-        $(`#${x}`).on("click", currentTurn.skills.Attack);
-        console.log()
+        $(`#${x}`).on("click", currentTurn.Attack);
         $(`#${x}`).toggleClass("infocus");
     }
 }

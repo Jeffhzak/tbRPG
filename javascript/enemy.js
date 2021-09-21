@@ -3,19 +3,57 @@ let monsterFactory = [
         constructor(lvl = 1) {
             this.name = "Slime";
             this.level = lvl;
-            this.hp = {currentHp: Math.floor(10*lvl/2), maxHp: Math.floor(10*lvl/2)};
-            this.atk = Math.floor(5*lvl/2);
+            this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
+            this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
+            this.spd = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+            this.skills = {
+                "Defend Ally": () => {console.log("warrior defended ally")}
+            };
+            this.Attack = (e) => {
+                targetUpdate(e);
+                playerSkills.Attack();
+                updateGameState();
+            };
         }
     },
     class Goblin {
         constructor(lvl = 1) {
             this.name = "Goblin";
             this.level = lvl;
-            this.hp = {currentHp: Math.floor(10*lvl/2), maxHp: Math.floor(10*lvl/2)};
-            this.atk = Math.floor(5*lvl/2);
+            this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
+            this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
+            this.spd = Math.floor(14 * Math.floor(Math.sqrt(lvl)));
+            this.skills = {
+                "Defend Ally": () => {console.log("warrior defended ally")}
+            };
+            this.Attack = (e) => {
+                targetUpdate(e);
+                enemySkills.Attack();
+                updateGameState();
+            };
         }
     }
 ]
+
+const enemySkills = {
+    Attack: () => {
+        attackModded = randomPercentMod(currentTurn.atk, 15)
+        currentTarget.hp.currentHp -= attackModded;
+        console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
+    }
+}
+
+const randomPlayerTarget = () => {
+    let rng1000 = Math.floor(Math.random() * 1000); 
+    let step = Math.floor(1000 / Object.keys(players).length);
+    //! cycles through all the objects in players and decides on one based on what rng1000 rolled
+    for (i=0; i<Object.keys(players).length; i++) {
+        stepTarget = players[Object.keys(players)[i]]
+        if (rng1000 <= (step*(i+1))+1) {
+            return stepTarget;    
+        }
+    }
+}
 
 const generateMonsters = (lvl) => {
     let enemies = null;
@@ -38,14 +76,9 @@ const renderMonsters = () => {
         // render models and names
         // console.log(`enemy console log: ${x}`);
         let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
-        enemies[x].displayElement = $newEnemyDiv;
+        enemies[x].displayElement = $newEnemyDiv; // updates data with linked html element
         $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
         $enemyContainer.append($newEnemyDiv);
-        ////////////////////////////////////////////////// temp stuff 
-        // $newEnemyDiv.on("click", (event) => {
-        //     console.log(event.target.id);
-        //   });
-        //////////////////////////////////////////////////  
         // render UI elements such as HP bar and current target (?)
         $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");
         $newEnemyHpBarFg = $("<div>").attr("class", "healthbarfg").attr("id", `${x}hp`).css("width", `${enemies[x].hp.currentHp/enemies[x].hp.maxHp*100}%`);

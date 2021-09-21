@@ -3,21 +3,18 @@ class Warrior {
     constructor(lvl = 1) {
         this.name = "Jargo";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(50 * lvl/2), maxHp: Math.floor(50 * lvl/2)};
+        this.hp = {currentHp: Math.floor(50 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(50 * Math.floor(Math.sqrt(lvl)))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10*lvl/2);
+        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+        this.spd = Math.floor(15 * Math.floor(Math.sqrt(lvl)));
         this.skills = {
-            Attack: (e) => {
-                targetUpdate(e);
-                playerSkills.Attack();
-                updateGameState();
-            },
             "Defend Ally": () => {console.log("warrior defended ally")}
-        }
-    }
-    Attack() {
-        console.log("warrior attacked");
-
+        };
+        this.Attack = (e) => {
+            targetUpdate(e);
+            playerSkills.Attack();
+            updateGameState();
+        };
     }
 }
 
@@ -25,9 +22,18 @@ class Mage {
     constructor(lvl = 1) {
         this.name = "Riz";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(40*lvl/2), maxHp: Math.floor(40*lvl/2)};
+        this.hp = {currentHp: Math.floor(40 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(40 * Math.floor(Math.sqrt(lvl)))};
         this.mp = {currentMp: Math.floor(50 * Math.sqrt(lvl)), maxMp: Math.floor(50 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10*lvl/2);
+        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+        this.spd = Math.floor(12 * Math.floor(Math.sqrt(lvl)));
+        this.skills = {
+            "Defend Ally": () => {console.log("warrior defended ally")}
+        };
+        this.Attack = (e) => {
+            targetUpdate(e);
+            playerSkills.Attack();
+            updateGameState();
+        };
     }
 }
 
@@ -35,15 +41,26 @@ class Thief {
     constructor(lvl = 1) {
         this.name = "Hood";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(40*lvl/2), maxHp: Math.floor(40*lvl/2)};
+        this.hp = {currentHp: Math.floor(40 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(40 * Math.floor(Math.sqrt(lvl)))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10*lvl/2);
+        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
+        this.spd = Math.floor(20 * Math.floor(Math.sqrt(lvl)));
+        this.skills = {
+            "Defend Ally": () => {console.log("warrior defended ally")}
+        };
+        this.Attack = (e) => {
+            targetUpdate(e);
+            playerSkills.Attack();
+            updateGameState();
+        };
     }
 }
 
 const playerSkills = {
     Attack: () => {
-        currentTarget.hp.currentHp -= currentTurn.atk;
+        attackModded = randomPercentMod(currentTurn.atk, 15)
+        currentTarget.hp.currentHp -= attackModded;
+        console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
     }
 }
 
@@ -68,7 +85,6 @@ const renderParty = () => {
     // re-render everything player related by iterating over the "players" object
     for (x in players) {
         // render models and names
-        // console.log(`player console log: ${x}`);
         let $newPlayerDiv = $("<div>").attr("class", "playermodel").attr("id", `${x}`);
         players[x].displayElement = $newPlayerDiv; // updates data with linked html element
         $newPlayerDiv.append("<h5>").text(`${players[x].name}`);
