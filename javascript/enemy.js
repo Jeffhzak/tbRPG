@@ -119,7 +119,6 @@ const renderMonsters = () => {
     // re-render everything enemy related by iterating over the "enemies" object
     for (x in enemies) {
         // render models and names
-        // console.log(`enemy console log: ${x}`);
         //! WORK ON RENDERING SPRITESHEET VIA CSS
         let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
         let $enemyModelImage = $("<div>").addClass(`${enemies[x].name}`);

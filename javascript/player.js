@@ -61,6 +61,7 @@ const playerSkills = {
         attackModded = randomPercentMod(currentTurn.atk, 15)
         currentTarget.hp.currentHp -= attackModded;
         console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
+        $("#menu").prepend(($("<h5>").text(`${currentTurn.name} attacked for ${attackModded} damage!`)));
     }
 }
 

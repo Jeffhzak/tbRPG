@@ -2,7 +2,22 @@
     border: 1px solid red;
 }
 
+#menu::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+}
+
+#menu::-webkit-scrollbar-track {
+    background: darkgray;        /* color of the tracking area */
+}
+
+#menu::-webkit-scrollbar-thumb {
+    background-color: darkslateblue;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    /* border: 3px solid darkslategray;  creates padding around scroll thumb */
+}
+
 h5 {
+    pointer-events: none;
     font-family: 'Roboto', sans-serif;
     font-size: medium;
 }
@@ -43,6 +58,9 @@ button {
     #menu {
         width: 15%;
         margin: 30px 10px 60px 10px;
+        display: flex;
+        flex-direction: column-reverse;
+        overflow-y: scroll;
         background-color: cadetblue;
     }
     #maininterface {
@@ -197,30 +215,35 @@ button {
 
 /*! SPRITESHEET INFO */
 .Goblin {
+    pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -409px -23px;
 	width: 44px;
 	height: 60px;
 }
 
 .Slime {
+    pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -573px -31px;
     width: 39px;
     height: 30px;
 }
 
 .thief {
+    pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -237px -18px;
 	width: 46px;
 	height: 89px;
 }
 
 .mage {
+    pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -129px -5px;
 	width: 76px;
 	height: 110px;
 }
 
 .warrior {
+    pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -29px -11px;
 	width: 60px;
 	height: 82px;

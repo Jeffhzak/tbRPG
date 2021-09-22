@@ -59,7 +59,9 @@ const renderWebsite = () => {
 // ! -- Render Game elements --
 const startGame = (diff) => () => {
     console.log(`current difficulty is set to: ${diff}`);
+    $("#menu").append(($("<h5>").text(`current difficulty is set to: ${diff}`)));
     console.log("Game is starting");
+    $("#menu").append(($("<h5>").text("Game is starting!")));
     $("#maininterface").empty();
     renderGameBaseElements();
     players = generatePlayers(level);
@@ -101,7 +103,7 @@ const renderUI = () => {
     $uiCommands.append($skillButton);
     $uiCommands.append($itemButton);
     $uiCommands.append($runButton);
-
+    
 }
 
 const renderWinState = () => {
@@ -116,6 +118,9 @@ const renderLoseState = () => {
     $background.append($("<h1>").text("YOU LOSE!"))
 }
 
+const renderTurnOrder = () => {
+    // console.log(turnOrder[0]);
+}
 // ! ======== Game-State Section ========
 // * ======== Game-State Section ========
 // ? ======== Game-State Section ========
@@ -149,6 +154,8 @@ const updateTurnOrder = (players, enemies) => {
                 enemies[x].aiTarget();
                 if (enemies[x].target.name != null) {
                     console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                    $enemyTargetText = $("<h5>").text(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                    $("#menu").prepend($enemyTargetText);
                 }
             }
         }
@@ -177,9 +184,6 @@ const updateTurnOrder = (players, enemies) => {
 
 }
 
-const renderTurnOrder = () => {
-    // console.log(turnOrder[0]);
-}
 
 const checkDeaths = () => {
 //removes dead characters from turn order immediately
