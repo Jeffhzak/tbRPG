@@ -13,7 +13,9 @@ let monsterFactory = [
                     enemySkills.Attack();
                 },
                 "Bounce": () => {
-                    console.log("The slime splashes around.");
+                    // console.log("The slime splashes around.");
+                    $("#menu").prepend(($("<h5>").text("The slime splashes around.")));
+
                 },
             };
 
@@ -21,11 +23,6 @@ let monsterFactory = [
                 this.target = randomPlayerTarget();
             }
 
-            // this.Attack = (e) => {
-            //     targetUpdate(e);
-            //     playerSkills.Attack();
-            //     updateGameState();
-            // };
         }
     },
     class Goblin {
@@ -42,7 +39,8 @@ let monsterFactory = [
                     enemySkills.Attack();
                 },
                 "Taunt": () => {
-                    console.log("The goblin laughs at your weakness.");
+                    // console.log("The goblin laughs at your weakness.");
+                    $("#menu").prepend(($("<h5>").text("The goblin laughs at your weakness.")));
                 },
             };
 
@@ -50,11 +48,6 @@ let monsterFactory = [
                 this.target = randomPlayerTarget();
             }
 
-            // this.Attack = (e) => {
-            //     targetUpdate(e);
-            //     enemySkills.Attack();
-            //     updateGameState();
-            // };
         }
     }
 ]
@@ -63,7 +56,8 @@ const enemySkills = {
     Attack: () => {
         attackModded = randomPercentMod(currentTurn.atk, 15)
         currentTarget.hp.currentHp -= attackModded;
-        console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
+        // console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
+        $("#menu").prepend(($("<h5>").text(`${currentTurn.name} attacked for ${attackModded} damage!`)));
     }
 }
 //! !!!!!!!!!!!!!!!!!!!!!! STILL CAN TARGET DEAD PLAYERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -124,12 +118,12 @@ const renderMonsters = () => {
         let $enemyModelImage = $("<div>").addClass(`${enemies[x].name}`);
         $newEnemyDiv.append($enemyModelImage);
         enemies[x].displayElement = $newEnemyDiv; // updates data with linked html element
-        let $enemyNamePlate = $("<h5>").text(`${enemies[x].name}`).css("margin", "0");
+        let $enemyNamePlate = $("<h5>").text(`${enemies[x].name}`);
         $newEnemyDiv.append($enemyNamePlate); 
         $enemyContainer.append($newEnemyDiv);
         // render UI elements such as HP bar and current target (?)
-        $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");
-        $newEnemyHpBarFg = $("<div>").attr("class", "healthbarfg").attr("id", `${x}hp`).css("width", `${enemies[x].hp.currentHp/enemies[x].hp.maxHp*100}%`);
+        const $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");
+        const $newEnemyHpBarFg = $("<div>").attr("class", "healthbarfg").attr("id", `${x}hp`).css("width", `${enemies[x].hp.currentHp/enemies[x].hp.maxHp*100}%`);
         $newEnemyHpBarBg.append($newEnemyHpBarFg);
         $enemyHpContainer.append($newEnemyHpBarBg);
         if (enemies[x].hp.currentHp <= 0) {

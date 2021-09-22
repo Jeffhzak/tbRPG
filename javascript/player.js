@@ -60,7 +60,7 @@ const playerSkills = {
     Attack: () => {
         attackModded = randomPercentMod(currentTurn.atk, 15)
         currentTarget.hp.currentHp -= attackModded;
-        console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
+        // console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
         $("#menu").prepend(($("<h5>").text(`${currentTurn.name} attacked for ${attackModded} damage!`)));
     }
 }
@@ -91,7 +91,7 @@ const renderParty = () => {
         if (players[x].hp.currentHp <= 0) {
             $newPlayerDiv.addClass("dead");
         }
-        let $newPlayerNamePlate = $("<h5>").text(`${players[x].name}`).css("margin", "0");
+        let $newPlayerNamePlate = $("<h5>").text(`${players[x].name}`);
         let $newPlayerModelImage = $("<div>").attr("class", `${x}`)
         $newPlayerDiv.append($newPlayerModelImage);
         $newPlayerDiv.append($newPlayerNamePlate);
@@ -108,22 +108,31 @@ const renderPartyUI = (partymember) => {
     const $uiPlayerInfo = $("#uiplayerinfo");
     const $newPartyMemberDiv = $("<div>").attr("class", "partymemberdiv");
     const $HpBarDiv = $("<div>").attr("class", "playerhpbar").attr("id", `${partymember}hpbar`);
+    const $MpBarDiv = $("<div>").attr("class", "playermpbar").attr("id", `${partymember}mpbar`);
     // render UI elements such as HP, MP and portrait
     // Appending Portrait
     let $newPortraitDiv = $("<div>").attr("class", "playerportrait").attr("id", `${players[partymember].name}portrait`);
     $newPartyMemberDiv.append($newPortraitDiv);
-    //Appending HP bar?
-    $newPlayerHpBarBg = $("<div>").attr("class", "playerhealthbarbg");
-    $newPlayerHpBarFg = $("<div>").attr("class", "playerhealthbarfg").attr("id", `${partymember}hp`).css("width", `${players[partymember].hp.currentHp/players[x].hp.maxHp*100}%`);
+    //Appending HP bar
+    const $newPlayerHpBarBg = $("<div>").attr("class", "playerhealthbarbg");
+    const $newPlayerHpBarFg = $("<div>").attr("class", "playerhealthbarfg").attr("id", `${partymember}hp`).css("width", `${players[partymember].hp.currentHp/players[x].hp.maxHp*100}%`);
     $newPlayerHpBarBg.append($newPlayerHpBarFg);
     $HpBarDiv.append($newPlayerHpBarBg);
     // Appending HP text
-    $HpBarDiv.append($("<p5>").text(`HP: ${players[partymember].hp.currentHp}/${players[partymember].hp.maxHp}`));
+    $HpBarDiv.append($("<h5>").text(`HP: ${players[partymember].hp.currentHp}/${players[partymember].hp.maxHp}`));
     $uiPlayerInfo.append($newPartyMemberDiv);
+    //Append block to Status Screen
     $newPartyMemberDiv.append($HpBarDiv);
+    //Appending MP bar
+    const $newPlayerMpBarBg = $("<div>").attr("class", "playermanabarbg");
+    const $newPlayerMpBarFg = $("<div>").attr("class", "playermanabarfg").attr("id", `${partymember}mp`).css("width", `${players[partymember].mp.currentMp/players[x].mp.maxMp*100}%`);
+    $newPlayerMpBarBg.append($newPlayerMpBarFg);
+    $MpBarDiv.append($newPlayerMpBarBg);
     // Appending MP text
-    $newPartyMemberDiv.append($("<p5>").text(`MP: ${players[partymember].mp.currentMp}/${players[partymember].mp.maxMp}`));
+    $MpBarDiv.append($("<h5>").text(`MP: ${players[partymember].mp.currentMp}/${players[partymember].mp.maxMp}`));
     $uiPlayerInfo.append($newPartyMemberDiv);
+    //Append block to Status Screen
+    $newPartyMemberDiv.append($MpBarDiv);
     // Appending status box?
     // -------------------------------------
 

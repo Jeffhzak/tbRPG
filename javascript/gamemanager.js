@@ -43,6 +43,10 @@ const renderWebsite = () => {
     const $menu = $("<div>").attr("id", "menu");
     const $mainInterface = $("<div>").attr("id", "maininterface");
     const $turnOrder = $("<div>").attr("id", "turnorder");
+    const $textForTurnOrder = $("<div>").text("- Turn Order -").css("text-align", "center");
+    $turnOrder.append($textForTurnOrder);
+    const $turnOrderContainer = $("<div>").addClass("turnordercontainer");
+    $turnOrder.append($turnOrderContainer);
 
     $overAllBackground.append($menu).append($mainInterface).append($turnOrder);
 
@@ -58,9 +62,9 @@ const renderWebsite = () => {
 
 // ! -- Render Game elements --
 const startGame = (diff) => () => {
-    console.log(`current difficulty is set to: ${diff}`);
+    // console.log(`current difficulty is set to: ${diff}`);
     $("#menu").append(($("<h5>").text(`current difficulty is set to: ${diff}`)));
-    console.log("Game is starting");
+    // console.log("Game is starting");
     $("#menu").append(($("<h5>").text("Game is starting!")));
     $("#maininterface").empty();
     renderGameBaseElements();
@@ -120,6 +124,28 @@ const renderLoseState = () => {
 
 const renderTurnOrder = () => {
     // console.log(turnOrder[0]);
+    console.log(currentTurn);
+    console.log(turnOrder[0]);
+    console.log(turnOrder);
+    const $turnOrderContainer = $(".turnordercontainer");
+    $turnOrderContainer.empty();
+    
+    const $turnOrderCurrent = $("<div>").addClass("currentturndisplay");
+    const $turnOrderCurrentPortrait = $("<div>").addClass(`${currentTurn.name}portrait`);
+    const $turnOrderCurrentName = $("<h5>").text(`${currentTurn.name}`);
+    $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
+    $turnOrderContainer.append($turnOrderCurrent);
+
+    for (objectWithin of turnOrder) {
+        const $turnOrderCurrent = $("<div>").addClass("followingturndisplay");
+        const $turnOrderCurrentPortrait = $("<div>").addClass(`${objectWithin.name}portrait`);
+        const $turnOrderCurrentName = $("<h5>").text(`${objectWithin.name}`);
+        $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
+        $turnOrderContainer.append($turnOrderCurrent);
+    }
+
+
+
 }
 // ! ======== Game-State Section ========
 // * ======== Game-State Section ========
@@ -153,7 +179,7 @@ const updateTurnOrder = (players, enemies) => {
                 turnOrder.push(enemies[x]);
                 enemies[x].aiTarget();
                 if (enemies[x].target.name != null) {
-                    console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                    // console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
                     $enemyTargetText = $("<h5>").text(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
                     $("#menu").prepend($enemyTargetText);
                 }
@@ -172,7 +198,7 @@ const updateTurnOrder = (players, enemies) => {
     // before the next guy can take their turn, check for dead people
     checkDeaths();
     // progress turn order
-    console.log(turnOrder);
+    // console.log(turnOrder);
     currentTurn = turnOrder.pop();
     // if it's the player's turn, highlight them
     if (currentTurn === players.warrior || currentTurn === players.mage || currentTurn === players.thief) {
