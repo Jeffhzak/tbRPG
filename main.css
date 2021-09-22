@@ -2,6 +2,11 @@
     border: 1px solid red;
 }
 
+h5 {
+    font-family: 'Roboto', sans-serif;
+    font-size: medium;
+}
+
 button:hover {
     background-color:orangered;
 }
@@ -81,9 +86,9 @@ button {
             width: 20%;
             background-color: royalblue;
             display:flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-end;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
         }
             #warrior {order:2}
             #mage {order:3}
@@ -100,9 +105,9 @@ button {
             width: 20%;
             background-color: orangered;
             display:flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-end;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
         }
             #enemy1{order:2}
             #enemy2{order:3}
@@ -169,6 +174,14 @@ button {
                 height: 6vh;
                 background-color: indigo;
             }
+            .playerhealthbarbg {
+                height: 5vh;
+                background-color: darkgray;
+                display: flex;
+            }
+            .playerhealthbarfg {
+                background-color: crimson;
+            }
             #uicommands {
                 width: 30%;
                 position: relative;
@@ -179,3 +192,36 @@ button {
                 position: relative;
                 background-color: whitesmoke;
             }
+
+
+
+/*! SPRITESHEET INFO */
+.Goblin {
+    background: url('./images/spritesheet.png') no-repeat -409px -23px;
+	width: 44px;
+	height: 60px;
+}
+
+.Slime {
+    background: url('./images/spritesheet.png') no-repeat -573px -31px;
+    width: 39px;
+    height: 30px;
+}
+
+.thief {
+    background: url('./images/spritesheet.png') no-repeat -237px -18px;
+	width: 46px;
+	height: 89px;
+}
+
+.mage {
+    background: url('./images/spritesheet.png') no-repeat -129px -5px;
+	width: 76px;
+	height: 110px;
+}
+
+.warrior {
+    background: url('./images/spritesheet.png') no-repeat -29px -11px;
+	width: 60px;
+	height: 82px;
+}

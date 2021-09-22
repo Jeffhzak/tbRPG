@@ -6,10 +6,6 @@ let monsterFactory = [
             this.hp = {currentHp: Math.floor(10 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(10 * Math.floor(Math.sqrt(lvl)))};
             this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
             this.spd = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
-            //! WORK ON RENDERING SPRITESHEET VIA CSS
-            this.background = "url('./images/placeholderimage.jpg') no-repeat -10px -10px";
-            this.backgroundWidth = "";
-            this.backgroundHeight = "";
             this.target = {};
             this.skills = {
                 "Attack": () => {
@@ -25,11 +21,11 @@ let monsterFactory = [
                 this.target = randomPlayerTarget();
             }
 
-            this.Attack = (e) => {
-                targetUpdate(e);
-                playerSkills.Attack();
-                updateGameState();
-            };
+            // this.Attack = (e) => {
+            //     targetUpdate(e);
+            //     playerSkills.Attack();
+            //     updateGameState();
+            // };
         }
     },
     class Goblin {
@@ -71,16 +67,22 @@ const enemySkills = {
     }
 }
 //! !!!!!!!!!!!!!!!!!!!!!! STILL CAN TARGET DEAD PLAYERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //! use filter method
 const randomPlayerTarget = () => {
+    const playersArray = [];
+    for (key in players) {
+        playersArray.push(players[key]);
+    }
+    const alivePlayersArray = playersArray.filter(character => (character.hp.currentHp > 0)) 
     let rng1000 = Math.floor(Math.random() * 1000); 
-    let step = Math.floor(1000 / Object.keys(players).length);
-    //! cycles through all the objects in players and decides on one based on what rng1000 rolled
-    for (i=0; i<Object.keys(players).length; i++) {
-        stepTarget = players[Object.keys(players)[i]]
-        if (rng1000 <= (step*(i+1))+1) {
-            return stepTarget;    
+    let step = Math.floor(1000 / alivePlayersArray.length);
+    for (let i=0; i < alivePlayersArray.length; i++) {
+        stepTarget = alivePlayersArray[i];
+        if (rng1000 <= ((step*(i+1))+1)) {
+            return stepTarget;
         }
     }
+
 }
 
 const randomMonsterSkill = (currentMonster) => {
@@ -119,9 +121,12 @@ const renderMonsters = () => {
         // render models and names
         // console.log(`enemy console log: ${x}`);
         //! WORK ON RENDERING SPRITESHEET VIA CSS
-        let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`).css("background", `${enemies[x].background}`);
+        let $newEnemyDiv = $("<div>").attr("class", "enemymodel").attr("id", `${x}`);
+        let $enemyModelImage = $("<div>").addClass(`${enemies[x].name}`);
+        $newEnemyDiv.append($enemyModelImage);
         enemies[x].displayElement = $newEnemyDiv; // updates data with linked html element
-        $newEnemyDiv.append("<h5>").text(`${enemies[x].name}`);
+        let $enemyNamePlate = $("<h5>").text(`${enemies[x].name}`).css("margin", "0");
+        $newEnemyDiv.append($enemyNamePlate); 
         $enemyContainer.append($newEnemyDiv);
         // render UI elements such as HP bar and current target (?)
         $newEnemyHpBarBg = $("<div>").attr("class", "healthbarbg");

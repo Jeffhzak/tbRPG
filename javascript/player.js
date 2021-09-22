@@ -90,8 +90,15 @@ const renderParty = () => {
         if (players[x].hp.currentHp <= 0) {
             $newPlayerDiv.addClass("dead");
         }
-        $newPlayerDiv.append("<h5>").text(`${players[x].name}`);
+        let $newPlayerNamePlate = $("<h5>").text(`${players[x].name}`).css("margin", "0");
+        let $newPlayerModelImage = $("<div>").attr("class", `${x}`)
+        $newPlayerDiv.append($newPlayerModelImage);
+        $newPlayerDiv.append($newPlayerNamePlate);
         $playerContainer.append($newPlayerDiv);
+        if (players[x].hp.currentHp <= 0) { //remove character model if player is dead
+            players[x].hp.currentHp = 0;
+            $newPlayerDiv.addClass("dead");
+        }
         renderPartyUI(x);
     }
 }
@@ -99,13 +106,20 @@ const renderParty = () => {
 const renderPartyUI = (partymember) => {
     const $uiPlayerInfo = $("#uiplayerinfo");
     const $newPartyMemberDiv = $("<div>").attr("class", "partymemberdiv");
+    const $HpBarDiv = $("<div>").attr("class", "playerhpbar").attr("id", `${partymember}hpbar`);
     // render UI elements such as HP, MP and portrait
     // Appending Portrait
     let $newPortraitDiv = $("<div>").attr("class", "playerportrait").attr("id", `${players[partymember].name}portrait`);
     $newPartyMemberDiv.append($newPortraitDiv);
+    //Appending HP bar?
+    $newPlayerHpBarBg = $("<div>").attr("class", "playerhealthbarbg");
+    $newPlayerHpBarFg = $("<div>").attr("class", "playerhealthbarfg").attr("id", `${partymember}hp`).css("width", `${players[partymember].hp.currentHp/players[x].hp.maxHp*100}%`);
+    $newPlayerHpBarBg.append($newPlayerHpBarFg);
+    $HpBarDiv.append($newPlayerHpBarBg);
     // Appending HP text
-    $newPartyMemberDiv.append($("<p5>").text(`HP: ${players[partymember].hp.currentHp}/${players[partymember].hp.maxHp}`));
+    $HpBarDiv.append($("<p5>").text(`HP: ${players[partymember].hp.currentHp}/${players[partymember].hp.maxHp}`));
     $uiPlayerInfo.append($newPartyMemberDiv);
+    $newPartyMemberDiv.append($HpBarDiv);
     // Appending MP text
     $newPartyMemberDiv.append($("<p5>").text(`MP: ${players[partymember].mp.currentMp}/${players[partymember].mp.maxMp}`));
     $uiPlayerInfo.append($newPartyMemberDiv);

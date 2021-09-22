@@ -50,7 +50,7 @@ const renderWebsite = () => {
     //! --->  start at x difficulty here
     const $startButton = $("<button>").on("click", startGame(1)).text("Easy").css("width", "20vh").css("align-self", "center");
     const $startButton1 = $("<button>").on("click", startGame(3)).text("Normal").css("width", "20vh").css("align-self", "center");
-    const $startButton2 = $("<button>").on("click", startGame(5)).text("Hard").css("width", "20vh").css("align-self", "center");
+    const $startButton2 = $("<button>").on("click", startGame(30)).text("Hard").css("width", "20vh").css("align-self", "center");
     $mainInterface.append($startButton);
     $mainInterface.append($startButton1);
     $mainInterface.append($startButton2);
@@ -121,25 +121,35 @@ const renderLoseState = () => {
 // ? ======== Game-State Section ========
 
 const updateGameState = () => {
-    renderParty();
-    renderMonsters();
-    updateTurnOrder(players, enemies);
-    renderTurnOrder();
-    checkWinState();
+    if (checkWinState() === "WIN") {
+        renderWinState();
+    }
+    else if (checkWinState() === "LOSE") {
+        renderLoseState();
+    } else {
+        renderParty();
+        renderMonsters();
+        updateTurnOrder(players, enemies);
+        renderTurnOrder();
+    }
 }
 
 const updateTurnOrder = (players, enemies) => {
     if (turnOrder.length === 0) { // if the round isnt over yet...
-        for (x in players) {
-            if (players[x].hp.currentHp > 0) { // push players that aren't dead into the turnOrder array
-                turnOrder.push(players[x]);
+        for (const x in players) {
+            const currentplayer = players[x];
+            const isAlive = (currentplayer) => {return currentplayer.hp.currentHp > 0};
+            if (isAlive(currentplayer)) { // push players that aren't dead into the turnOrder array
+                turnOrder.push(currentplayer);
             }
         }
-        for (x in enemies) {
+        for (const x in enemies) {
             if (enemies[x].hp.currentHp > 0) {// push monsters that aren't dead into the turnOrder array
                 turnOrder.push(enemies[x]);
                 enemies[x].aiTarget();
-                console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                if (enemies[x].target.name != null) {
+                    console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                }
             }
         }
         //sort turnOrder array by speed, lowest to highest
@@ -168,11 +178,11 @@ const updateTurnOrder = (players, enemies) => {
 }
 
 const renderTurnOrder = () => {
-    console.log(turnOrder[0]);
+    // console.log(turnOrder[0]);
 }
 
 const checkDeaths = () => {
-
+//removes dead characters from turn order immediately
     for (x in turnOrder) {
         // console.log(`for-in ${x}`);
         // console.log(turnOrder[x]);
@@ -198,11 +208,12 @@ const checkWinState = () => {
     }
     if (playerDeadCount === 3) {
         console.log("YOU LOSE");
-        renderLoseState();
+        return "LOSE";
+        
     }
     if (enemyDeadCount === 3) {
         console.log("YOU WIN");
-        renderWinState();
+        return "WIN";
     }
 }
 
