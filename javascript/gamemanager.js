@@ -176,11 +176,12 @@ const updateTurnOrder = (players, enemies) => {
         }
         for (const x in enemies) {
             if (enemies[x].hp.currentHp > 0) {// push monsters that aren't dead into the turnOrder array
-                turnOrder.push(enemies[x]);
-                enemies[x].aiTarget();
-                if (enemies[x].target.name != null) {
+                const currentEnemy = enemies[x];
+                turnOrder.push(currentEnemy);
+                currentEnemy.aiTarget();
+                if (currentEnemy.target.name != null) {
                     // console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
-                    $enemyTargetText = $("<h5>").text(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                    $enemyTargetText = $("<h5>").text(`${currentEnemy.name} is looking at ${currentEnemy.target.name}...`);
                     $("#menu").prepend($enemyTargetText);
                 }
             }

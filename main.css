@@ -1,6 +1,19 @@
-*{
-    border: 1px solid red;
+:root {
+    --almostblack: #293241;
+    --orange: #ee6c4d;
+    --lightblue: #e0fbfc;
+    --greyblue: #98c1d9;
+    --darkblue: #3d5a80;
+    --muddybrown: #c9ada7;
+    --greybrown: #9a8c98;
+    --greyish: #4a4e69;
+    /* syntax: var(--fontcolor)
+    var(-- */
 }
+
+/* *{
+    border: 1px solid red;
+} */
 
 #menu::-webkit-scrollbar {
     width: 12px;               /* width of the entire scrollbar */
@@ -14,6 +27,10 @@
     background-color: darkslateblue;    /* color of the scroll thumb */
     border-radius: 20px;       /* roundness of the scroll thumb */
     /* border: 3px solid darkslategray;  creates padding around scroll thumb */
+}
+
+body {
+    background-color: var(--almostblack);
 }
 
 h5 {
@@ -51,7 +68,6 @@ button {
     display:flex;
     flex-direction: row;
     justify-content: center;
-    border: 2px solid green;
     height: 700px;
 }
 
@@ -62,7 +78,9 @@ button {
         display: flex;
         flex-direction: column-reverse;
         overflow-y: scroll;
-        background-color: cadetblue;
+        background-color: var(--greyblue);
+        border: 3px solid var(--orange);
+        border-radius: 1%;
     }
     #maininterface {
         display: flex;
@@ -71,15 +89,18 @@ button {
         justify-content: center;
         width: 70%;
         margin: 10px;
-        border: 5px solid blueviolet;
+        border: 5px solid var(--darkblue);
         padding: 5px;
+        background-color: var(--greyish);
     }
     #turnorder {
         width: 15%;
         margin: 80px 10px 80px 10px;
         display: flex;
         flex-direction: column;
-        background-color: cadetblue;
+        background-color: var(--greyblue);
+        border: 3px solid var(--orange);
+        border-radius: 1%;
     }
         .turnordercontainer {
             height: 95%;
@@ -91,12 +112,16 @@ button {
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+                margin: 3px 0 3px 0;
+                background-color: orangered;
             }
             .followingturndisplay {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
+                margin: 3px 0 3px 0;
+                background-color: steelblue;
             }
 
 /* !game interface */
@@ -110,7 +135,8 @@ button {
     div.characters {
         height: 30%;
         width: 95%;
-        background-color: lightblue;
+        background-color: var(--muddybrown);
+        border: 3px solid var(--orange);
     }
 
     #playercontainer {
@@ -118,11 +144,12 @@ button {
         flex-direction: row;
         justify-content: space-around;
         align-items: flex-end;
+        border-top: none;
     }
         .playermodel {
             height:80%;
             width: 20%;
-            background-color: royalblue;
+            /* background-color: royalblue; */
             display:flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -137,11 +164,13 @@ button {
         flex-direction: row;
         justify-content: space-around;
         align-items: flex-start; 
+        border-bottom: none;
+        border-top: none;
     }
         .enemymodel {
             height:80%;
             width: 20%;
-            background-color: orangered;
+            /* background-color: orangered; */
             display:flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -153,10 +182,10 @@ button {
 
     #enemyHPcontainer {
         height: 20px;
-        background-color: white;
         display: flex;
         flex-flow: row;
         justify-content: space-around;
+        border-bottom: none;
     }
         .healthbarbg {
             background-color: darkgray;
@@ -172,15 +201,17 @@ button {
         }
     #arrowcontainer {
         height: 20px;
-        background-color: gainsboro;
+        background-color: var(--greyblue);
+        border-top: none;
+        border-bottom: none;
     }
 /* !User Interface stuff */
 
         #uicontainer {
             display: flex;
             height: 30vh;
-            border: 5px solid cadetblue;
-            background-color: gainsboro;
+            border: 3px solid var(--orange);
+            background-color: var(--greyish);
             
         }
         .uimenu {
@@ -189,6 +220,7 @@ button {
             flex-wrap: wrap;
             width: 95%;
             justify-content: space-around;
+            background-color: var(--greyish);
         }
             #uicommands {
                 display: flex;
@@ -203,10 +235,12 @@ button {
                     text-align: center;
                 }
             .partymemberdiv {
-                height:31%;
+                height:30%;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                border: 3px solid var(--greyish);
+                background-color: var(--greybrown);
             }
             .playerportrait {
                 width: 8vh;
@@ -238,12 +272,10 @@ button {
             #uicommands {
                 width: 30%;
                 position: relative;
-                background-color: whitesmoke;
             }
             #uiplayerinfo {
                 width: 70%;
                 position: relative;
-                background-color: whitesmoke;
             }
 
 
@@ -255,12 +287,22 @@ button {
 	width: 44px;
 	height: 60px;
 }
-
+.Goblinportrait {
+    pointer-events: none;
+    background: url('./images/spritesheet.png') no-repeat -407px -133px;
+	width: 38px;
+	height: 37px;
+}
 .Slime {
     pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -573px -31px;
     width: 39px;
     height: 30px;
+}
+.Slimeportrait {
+    background: url('./images/spritesheet.png') no-repeat -507px -139px;
+	width: 39px;
+	height: 32px;
 }
 
 .thief {
@@ -269,12 +311,33 @@ button {
 	width: 46px;
 	height: 89px;
 }
-
+.Hoodportrait {
+    background: url('./images/spritesheet.png') no-repeat -239px -126px;
+	width: 45px;
+	height: 46px;
+}
+#Hoodportrait {
+    background: url('./images/spritesheet.png') no-repeat -239px -126px;
+	width: 45px;
+	height: 46px;
+    background-color:silver;
+}
 .mage {
     pointer-events: none;
     background: url('./images/spritesheet.png') no-repeat -129px -5px;
 	width: 76px;
 	height: 110px;
+}
+.Rizportrait {
+    background: url('./images/spritesheet.png') no-repeat -140px -127px;
+	width: 46px;
+	height: 46px;
+}
+#Rizportrait {
+    background: url('./images/spritesheet.png') no-repeat -140px -127px;
+	width: 46px;
+	height: 46px;
+    background-color:silver;
 }
 
 .warrior {
@@ -282,4 +345,15 @@ button {
     background: url('./images/spritesheet.png') no-repeat -29px -11px;
 	width: 60px;
 	height: 82px;
+}
+.Jargoportrait {
+    background: url('./images/spritesheet.png') no-repeat -34px -127px;
+	width: 49px;
+	height: 47px;
+}
+#Jargoportrait {
+    background: url('./images/spritesheet.png') no-repeat -34px -127px;
+	width: 49px;
+	height: 47px;
+    background-color:silver;
 }
