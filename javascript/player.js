@@ -6,7 +6,7 @@ class Warrior {
         this.hp = {currentHp: Math.floor(50 * Math.sqrt(lvl)), maxHp: Math.floor(50 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
         this.atk = Math.floor(25 * Math.sqrt(lvl));
-        this.spd = Math.floor(15 * Math.sqrt(lvl));
+        this.spd = Math.floor(75 * Math.sqrt(lvl));
         this.skills = {
             "Brutal Strike": () => {targetEnemyHighlightUpdate("Brutal Strike", 10)},
             "Howl": () => {playerSkills["Howl"](20)}
@@ -26,7 +26,7 @@ class Mage {
         this.hp = {currentHp: Math.floor(40 * Math.sqrt(lvl)), maxHp: Math.floor(40 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(50 * Math.sqrt(lvl)), maxMp: Math.floor(50 * Math.sqrt(lvl))};
         this.atk = Math.floor(10 * Math.sqrt(lvl));
-        this.spd = Math.floor(12 * Math.sqrt(lvl));
+        this.spd = Math.floor(50 * Math.sqrt(lvl));
         this.skills = {
             "Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
         };
@@ -45,7 +45,7 @@ class Thief {
         this.hp = {currentHp: Math.floor(40 * Math.sqrt(lvl)), maxHp: Math.floor(40 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
         this.atk = Math.floor(20 * Math.sqrt(lvl));
-        this.spd = Math.floor(20 * Math.sqrt(lvl));
+        this.spd = Math.floor(100 * Math.sqrt(lvl));
         this.skills = {
             "Steal Health": () => {targetEnemyHighlightUpdate("Steal Health", 10)},
             // "Poison Strike": () => {targetEnemyHighlightUpdate("Poison Strike", )},
@@ -73,7 +73,7 @@ const targetEnemyHighlightUpdate = (skillName, mpCost) => {
 //searches PlayerSkills Object to fire the right skill function
 const skillUse = (skillName, mpCost) => (e) => {
     targetUpdate(e);
-    console.log(currentTarget);
+    // console.log(currentTarget);
 
     for (objectKey in playerSkills) {
         if (objectKey === skillName) {
@@ -101,7 +101,7 @@ const playerSkills = {
         appendToCombatLog(damageText, onKillText);
     },
     "Steal Health": (mpCost) => {
-        console.log("calc Steal Health fired");
+        // console.log("calc Steal Health fired");
         let attackModded = randomPercentMod(currentTurn.atk, 15);
         attackModded = Math.floor(attackModded*0.8);
         calcHpMpChanges("HP", attackModded, currentTarget);
@@ -115,7 +115,7 @@ const playerSkills = {
 
     },
     "Multi-Stab": (mpCost) => {
-        console.log("calc Multi-Stab fired");
+        // console.log("calc Multi-Stab fired");
         for (let i = 0; i < 3; i++) {
             let attackModded = randomPercentMod(currentTurn.atk, 15);
             attackModded = Math.floor(attackModded * 0.66);
@@ -130,7 +130,7 @@ const playerSkills = {
         calcHpMpChanges("MP", mpCost, currentTurn);
     },
     "Firebolt": (mpCost) => {
-        console.log("calc Firebolt fired");
+        // console.log("calc Firebolt fired");
         let attackModded = randomPercentMod(currentTurn.atk, 15);
         attackModded = attackModded*3;
         calcHpMpChanges("HP", attackModded, currentTarget);
@@ -141,7 +141,7 @@ const playerSkills = {
         appendToCombatLog(damageText, onKillText);
     },
     "Brutal Strike": (mpCost) => {
-        console.log("calc Brutal Strike fired");
+        // console.log("calc Brutal Strike fired");
         let attackModded = randomPercentMod(currentTurn.atk, 15);
         attackModded = attackModded*2;
         calcHpMpChanges("HP", attackModded, currentTarget);

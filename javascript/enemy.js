@@ -5,7 +5,7 @@ let monsterFactory = [
             this.level = lvl;
             this.hp = {currentHp: Math.floor(15 * Math.sqrt(lvl)), maxHp: Math.floor(15* Math.sqrt(lvl))};
             this.atk = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
-            this.spd = Math.floor(5 * Math.floor(Math.sqrt(lvl)));
+            this.spd = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
             this.target = {};
             this.skills = {
                 "Attack": () => {
@@ -35,7 +35,7 @@ let monsterFactory = [
             this.level = lvl;
             this.hp = {currentHp: Math.floor(20 * Math.sqrt(lvl)), maxHp: Math.floor(20 * Math.sqrt(lvl))};
             this.atk = Math.floor(5 * Math.sqrt(lvl));
-            this.spd = Math.floor(8 * Math.sqrt(lvl));
+            this.spd = Math.floor(15 * Math.sqrt(lvl));
             this.target = {};
             this.skills = {
                 "Attack": () => {
@@ -65,7 +65,7 @@ let monsterFactory = [
             this.level = lvl;
             this.hp = {currentHp: Math.floor(30 * Math.sqrt(lvl)), maxHp: Math.floor(30 * Math.sqrt(lvl))};
             this.atk = Math.floor(5 * Math.sqrt(lvl));
-            this.spd = Math.floor(7 * Math.sqrt(lvl));
+            this.spd = Math.floor(12 * Math.sqrt(lvl));
             this.target = {};
             this.skills = {
                 "Attack": () => {
@@ -86,8 +86,10 @@ const enemySkills = {
     Attack: () => {
         attackModded = randomPercentMod(currentTurn.atk, 15)
         currentTarget.hp.currentHp -= attackModded;
-        // console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
-        $("#menu").prepend(($("<h5>").text(`${currentTurn.name} attacked ${currentTarget.name} for ${attackModded} damage!`)));
+
+        let damageText = `${currentTurn.name} attacked ${currentTarget.name} for ${attackModded} damage!`;
+        let onKillText = `${currentTurn.name} killed ${currentTarget.name}!`;
+        appendToCombatLog(damageText, onKillText);
     }
 }
 
@@ -102,7 +104,7 @@ const randomPlayerTarget = () => {
     for (let i=0; i < alivePlayersArray.length; i++) {
         stepTarget = alivePlayersArray[i];
         if (rng1000 <= ((step*(i+1))+1)) {
-            console.log(stepTarget);
+            // console.log(stepTarget);
             return stepTarget;
         }
     }

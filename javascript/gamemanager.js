@@ -148,51 +148,55 @@ const renderLoseState = () => {
     const $background = $("#background");
     $background.empty();
     $background.append($("<h1>").text("YOU LOSE!").css("color", "white"))
-    $tryAgainButton = $("<button>").text("Try again?").on("click", renderWebsite).addClass("startgamebutton");
+    $tryAgainButton = $("<button>").text("Retry?").on("click", renderWebsite).addClass("startgamebutton");
     $background.append($tryAgainButton);
 }
 
 const renderTurnOrder = () => {
-    const $turnOrderContainer = $(".turnordercontainer");
-    $turnOrderContainer.empty();
-    
-    const $turnOrderCurrent = $("<div>").addClass("currentturndisplay");
-    const $turnOrderCurrentPortrait = $("<div>").addClass(`${currentTurn.name}portrait`);
-    const $turnOrderCurrentName = $("<h5>").text(`${currentTurn.name}`);
-    $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
-    $turnOrderContainer.append($turnOrderCurrent);
-
-    for (objectWithin of turnOrder) {
-        const $turnOrderCurrent = $("<div>").addClass("followingturndisplay");
-        const $turnOrderCurrentPortrait = $("<div>").addClass(`${objectWithin.name}portrait`);
-        const $turnOrderCurrentName = $("<h5>").text(`${objectWithin.name}`);
+    setTimeout(() => {
+        const $turnOrderContainer = $(".turnordercontainer");
+        $turnOrderContainer.empty();
+        for (objectWithin of turnOrder) {
+            const $turnOrderCurrent = $("<div>").addClass("followingturndisplay");
+            const $turnOrderCurrentPortrait = $("<div>").addClass(`${objectWithin.name}portrait`);
+            const $turnOrderCurrentName = $("<h5>").text(`${objectWithin.name}`);
+            $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
+            $turnOrderContainer.prepend($turnOrderCurrent);
+        }
+        const $turnOrderCurrent = $("<div>").addClass("currentturndisplay");
+        const $turnOrderCurrentPortrait = $("<div>").addClass(`${currentTurn.name}portrait`);
+        const $turnOrderCurrentName = $("<h5>").text(`${currentTurn.name}`);
         $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
-        $turnOrderContainer.append($turnOrderCurrent);
-    }
+        $turnOrderContainer.prepend($turnOrderCurrent);
+    }, 500)
 }
 
 const appendToCombatLog = (damageText, onkillText) => {
+    setTimeout(() => {
     $("#menu").prepend(($("<h5>").text(damageText)));
     if (currentTarget.hp.currentHp <= 0) {
         $("#menu").prepend(($("<h5>").text(onkillText)));
     }
+}, 500)
 }
 // ! ======== Game-State Section ========
 // * ======== Game-State Section ========
 // ? ======== Game-State Section ========
 
 const updateGameState = () => {
-    if (checkWinState() === "WIN") {
-        renderWinState();
-    }
-    else if (checkWinState() === "LOSE") {
-        renderLoseState();
-    } else {
-        renderParty();
-        renderMonsters();
-        updateTurnOrder(players, enemies);
-        renderTurnOrder();
-    }
+    setTimeout(() => {
+        if (checkWinState() === "WIN") {
+            renderWinState();
+        }
+        else if (checkWinState() === "LOSE") {
+            renderLoseState();
+        } else {
+            renderParty();
+            renderMonsters();
+            updateTurnOrder(players, enemies);
+            renderTurnOrder();
+        }
+    }, 400)
 }
 
 const updateTurnOrder = (players, enemies) => {
@@ -268,12 +272,12 @@ const checkWinState = () => {
         }
     }
     if (playerDeadCount === 3) {
-        console.log("YOU LOSE");
+        // console.log("YOU LOSE");
         return "LOSE";
         
     }
     if (enemyDeadCount === 3) {
-        console.log("YOU WIN");
+        // console.log("YOU WIN");
         return "WIN";
     }
 }
