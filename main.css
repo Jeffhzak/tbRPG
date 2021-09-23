@@ -64,6 +64,11 @@ button {
 
 }
 
+.startgamebutton {
+    width: 20vh;
+    align-self: center;
+}
+
 #overallbackground {
     display:flex;
     flex-direction: row;
@@ -233,7 +238,38 @@ button {
                     width: 40%;
                     height: 40%;
                     text-align: center;
+                    position: relative;
                 }
+                    .backbutton {
+                        position: absolute;
+                        width: 3vh;
+                        background-color: var(--orange);
+                        bottom: 13vh;
+                    }
+                    .backbutton:hover {
+                        background-color: var(--greyish);
+                    }
+                    #uibuttonsskills {
+                       z-index: 1;
+                    }
+                        .skillsdiv {
+                            display: flex;
+                            flex-direction: column-reverse;
+                            position: absolute;
+                            left: 17vh;
+                            width: 20vh;
+                            background-color: var(--greyblue);
+                            border: 3px solid var(--orange);
+                            border-radius: 1%;
+                            color: black;
+                            font-family: 'Roboto', sans-serif;
+                        }
+                            .skillsdiv:hover {
+                                filter: none;
+                            }
+                            .skillbox:hover {
+                                background-color: var(--orange);
+                            }
             .partymemberdiv {
                 height:30%;
                 display: flex;
@@ -303,6 +339,17 @@ button {
     background: url('./images/spritesheet.png') no-repeat -507px -139px;
 	width: 39px;
 	height: 32px;
+}
+.Skeleton {
+    pointer-events: none;
+    background: url('./images/spritesheet.png') no-repeat -729px -15px;
+	width: 69px;
+	height: 94px;
+}
+.Skeletonportrait {
+    background: url('./images/spritesheet.png') no-repeat -746px -131px;
+	width: 39px;
+	height: 37px;
 }
 
 .thief {

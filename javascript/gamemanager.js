@@ -1,7 +1,12 @@
 //! ======== Global Variables ========
 //* ======== Global Variables ========
 //? ======== Global Variables ========
-let difficulty = 1;
+const difficulty = {
+    easy: 1,
+    normal: 7,
+    hard: 15,
+    die: 30,        
+}
 let level = 1;
 let currentTurn = {};
 let currentTarget = {};
@@ -39,6 +44,7 @@ const InitializeRender = () => {
 
 const renderWebsite = () => {
     const $body = $("body");
+    $body.empty();
     const $overAllBackground = $("<div>").attr("id", "overallbackground");
     const $menu = $("<div>").attr("id", "menu");
     const $mainInterface = $("<div>").attr("id", "maininterface");
@@ -52,12 +58,15 @@ const renderWebsite = () => {
 
     $body.append($overAllBackground);
     //! --->  start at x difficulty here
-    const $startButton = $("<button>").on("click", startGame(1)).text("Easy").css("width", "20vh").css("align-self", "center");
-    const $startButton1 = $("<button>").on("click", startGame(3)).text("Normal").css("width", "20vh").css("align-self", "center");
-    const $startButton2 = $("<button>").on("click", startGame(30)).text("Hard").css("width", "20vh").css("align-self", "center");
+    
+    const $startButton = $("<button>").on("click", startGame(difficulty.easy)).text("Easy").addClass("startgamebutton");
+    const $startButton1 = $("<button>").on("click", startGame(difficulty.normal)).text("Normal").addClass("startgamebutton");
+    const $startButton2 = $("<button>").on("click", startGame(difficulty.hard)).text("Hard").addClass("startgamebutton");
+    const $startbutton3 = $("<button>").on("click", startGame(difficulty.die)).text("Insane").addClass("startgamebutton");
     $mainInterface.append($startButton);
     $mainInterface.append($startButton1);
     $mainInterface.append($startButton2);
+    $mainInterface.append($startbutton3);
 }
 
 // ! -- Render Game elements --
@@ -96,13 +105,11 @@ const renderGameBaseElements = () => {
 
 const renderUI = () => {
     const $uiCommands = $("#uicommands");
-    //! change attack button here
-    //* change attack button here
-    //? change attack button here
+    $uiCommands.empty();
     const $attackButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsattack").text("Attack").on("click", basicAttack);
-    const $skillButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsskills").text("Skill");
+    const $skillButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsskills").text("Skill").on("click", renderSkillsUI);
     const $itemButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsitems").text("Item");
-    const $runButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsrun").text("Run");
+    const $runButton = $("<button>").attr("type", "button").addClass("uibuttons").attr("id", "uibuttonsrun").text("Run").on("click", renderLoseState);
     $uiCommands.append($attackButton);
     $uiCommands.append($skillButton);
     $uiCommands.append($itemButton);
@@ -110,23 +117,42 @@ const renderUI = () => {
     
 }
 
+const renderSkillsUI = (e) => {
+    const $newSkillsDiv = $("<div>").attr("class", "skillsdiv");
+    const $newBackButton = $("<button>").attr("class", "backbutton").text("x").on("click", unRenderSkillsUI);
+    const $skillButton = $(e.target);
+    $skillButton.append($newSkillsDiv);
+    $skillButton.append($newBackButton);
+    $skillButton.off();
+    for (key in currentTurn.skills) {
+        const $newSkill = $("<div>").text(key).on("click", currentTurn.skills[key]).on("click", renderUI).addClass("skillbox");
+        $newSkillsDiv.append($newSkill);
+    }
+}
+
+const unRenderSkillsUI = () => {
+    $("#uibuttonsskills").empty();
+    $("#uibuttonsskills").text("Skill").on("click", renderSkillsUI);
+}
+
+
 const renderWinState = () => {
     const $background = $("#background");
     $background.empty();
-    $background.append($("<h1>").text("YOU WIN!"))
+    $background.append($("<h1>").text("YOU WIN!").css("color", "white"));
+    $tryAgainButton = $("<button>").text("Go again!").on("click", renderWebsite).addClass("startgamebutton");
+    $background.append($tryAgainButton);
 }
 
 const renderLoseState = () => {
     const $background = $("#background");
     $background.empty();
-    $background.append($("<h1>").text("YOU LOSE!"))
+    $background.append($("<h1>").text("YOU LOSE!").css("color", "white"))
+    $tryAgainButton = $("<button>").text("Try again?").on("click", renderWebsite).addClass("startgamebutton");
+    $background.append($tryAgainButton);
 }
 
 const renderTurnOrder = () => {
-    // console.log(turnOrder[0]);
-    console.log(currentTurn);
-    console.log(turnOrder[0]);
-    console.log(turnOrder);
     const $turnOrderContainer = $(".turnordercontainer");
     $turnOrderContainer.empty();
     
@@ -143,9 +169,13 @@ const renderTurnOrder = () => {
         $turnOrderCurrent.append($turnOrderCurrentPortrait).append($turnOrderCurrentName);
         $turnOrderContainer.append($turnOrderCurrent);
     }
+}
 
-
-
+const appendToCombatLog = (damageText, onkillText) => {
+    $("#menu").prepend(($("<h5>").text(damageText)));
+    if (currentTarget.hp.currentHp <= 0) {
+        $("#menu").prepend(($("<h5>").text(onkillText)));
+    }
 }
 // ! ======== Game-State Section ========
 // * ======== Game-State Section ========
@@ -251,11 +281,29 @@ const checkWinState = () => {
 const targetUpdate = (e) => {
     currentTarget = enemies[`${e.target.id}`];
 }
-//! -> I need to make a function that accepts an argument of what skill to fire, but where to get that argument? use the same way I got the currentTarget^ ???
-const basicAttack = () => {
-    for (x in enemies) {
-        $(`#${x}`).on("click", currentTurn.Attack);
-        $(`#${x}`).toggleClass("infocus");
+
+calcHpMpChanges = (HpOrMp, valueToChangeBy, target) => {
+    //! don't forget, positive valueToChange = deduction. That's normal.
+    if (HpOrMp === "HP") {
+        if (valueToChangeBy >= 0) {
+            target.hp.currentHp -= valueToChangeBy;
+            if (target.hp.currentHp <= 0) {target.hp.currentHp = 0};
+        }
+        else {
+            target.hp.currentHp -= valueToChangeBy;
+            if (target.hp.currentHp >= target.hp.maxHp) {target.hp.currentHp = target.hp.maxHp};
+        }
+    }
+    
+    else if (HpOrMp === "MP") {
+        if (valueToChangeBy >= 0) {
+            target.mp.currentMp -= valueToChangeBy;
+            if (target.mp.currentMp <= 0) {target.mp.currentMp = 0};
+        }
+        else {
+            target.mp.currentMp -= valueToChangeBy;
+            if (target.mp.currentMp >= target.mp.maxMp) {target.mp.currentMp = target.mp.maxMp};
+        } 
     }
 }
 

@@ -3,12 +3,13 @@ class Warrior {
     constructor(lvl = 1) {
         this.name = "Jargo";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(50 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(50 * Math.floor(Math.sqrt(lvl)))};
+        this.hp = {currentHp: Math.floor(50 * Math.sqrt(lvl)), maxHp: Math.floor(50 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
-        this.spd = Math.floor(15 * Math.floor(Math.sqrt(lvl)));
+        this.atk = Math.floor(25 * Math.sqrt(lvl));
+        this.spd = Math.floor(15 * Math.sqrt(lvl));
         this.skills = {
-            "Defend Ally": () => {console.log("warrior defended ally")}
+            "Brutal Strike": () => {targetEnemyHighlightUpdate("Brutal Strike", 10)},
+            "Howl": () => {playerSkills["Howl"](20)}
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -22,12 +23,12 @@ class Mage {
     constructor(lvl = 1) {
         this.name = "Riz";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(40 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(40 * Math.floor(Math.sqrt(lvl)))};
+        this.hp = {currentHp: Math.floor(40 * Math.sqrt(lvl)), maxHp: Math.floor(40 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(50 * Math.sqrt(lvl)), maxMp: Math.floor(50 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
-        this.spd = Math.floor(12 * Math.floor(Math.sqrt(lvl)));
+        this.atk = Math.floor(10 * Math.sqrt(lvl));
+        this.spd = Math.floor(12 * Math.sqrt(lvl));
         this.skills = {
-            "Defend Ally": () => {console.log("warrior defended ally")}
+            "Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -41,12 +42,14 @@ class Thief {
     constructor(lvl = 1) {
         this.name = "Hood";
         this.level = lvl;
-        this.hp = {currentHp: Math.floor(40 * Math.floor(Math.sqrt(lvl))), maxHp: Math.floor(40 * Math.floor(Math.sqrt(lvl)))};
+        this.hp = {currentHp: Math.floor(40 * Math.sqrt(lvl)), maxHp: Math.floor(40 * Math.sqrt(lvl))};
         this.mp = {currentMp: Math.floor(20 * Math.sqrt(lvl)), maxMp: Math.floor(20 * Math.sqrt(lvl))};
-        this.atk = Math.floor(10 * Math.floor(Math.sqrt(lvl)));
-        this.spd = Math.floor(20 * Math.floor(Math.sqrt(lvl)));
+        this.atk = Math.floor(20 * Math.sqrt(lvl));
+        this.spd = Math.floor(20 * Math.sqrt(lvl));
         this.skills = {
-            "Defend Ally": () => {console.log("warrior defended ally")}
+            "Steal Health": () => {targetEnemyHighlightUpdate("Steal Health", 10)},
+            // "Poison Strike": () => {targetEnemyHighlightUpdate("Poison Strike", )},
+            "Multi-Stab": () => {targetEnemyHighlightUpdate("Multi-Stab", 10)}
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -56,12 +59,104 @@ class Thief {
     }
 }
 
+
+//! ======= Player SKILL related functions =======
+
+//applies targeting UI to enemies
+const targetEnemyHighlightUpdate = (skillName, mpCost) => {
+    for (x in enemies) {
+        $(`#${x}`).on("click", skillUse(skillName, mpCost));
+        $(`#${x}`).toggleClass("infocus");
+    }
+}
+
+//searches PlayerSkills Object to fire the right skill function
+const skillUse = (skillName, mpCost) => (e) => {
+    targetUpdate(e);
+    console.log(currentTarget);
+
+    for (objectKey in playerSkills) {
+        if (objectKey === skillName) {
+            playerSkills[skillName](mpCost);
+        }
+    }
+    updateGameState();
+}
+
+const basicAttack = () => {
+    for (x in enemies) {
+        $(`#${x}`).on("click", currentTurn.Attack);
+        $(`#${x}`).toggleClass("infocus");
+    }
+}
+
+//? list of player skills available
 const playerSkills = {
     Attack: () => {
-        attackModded = randomPercentMod(currentTurn.atk, 15)
+        let attackModded = randomPercentMod(currentTurn.atk, 15)
         currentTarget.hp.currentHp -= attackModded;
-        // console.log(`${currentTurn.name} attacked for ${attackModded} damage!`);
-        $("#menu").prepend(($("<h5>").text(`${currentTurn.name} attacked for ${attackModded} damage!`)));
+
+        let damageText = `${currentTurn.name} attacked ${currentTarget.name} for ${attackModded} damage!`
+        let onKillText = `${currentTurn.name} attacked and killed ${currentTarget.name}!`
+        appendToCombatLog(damageText, onKillText);
+    },
+    "Steal Health": (mpCost) => {
+        console.log("calc Steal Health fired");
+        let attackModded = randomPercentMod(currentTurn.atk, 15);
+        attackModded = Math.floor(attackModded*0.8);
+        calcHpMpChanges("HP", attackModded, currentTarget);
+
+        calcHpMpChanges("HP", (attackModded*(-1)), currentTurn)
+        calcHpMpChanges("MP", mpCost, currentTurn);
+
+        let damageText = `${currentTurn.name} stole ${attackModded} health from ${currentTarget.name}!`
+        let onKillText = `${currentTurn.name} killed ${currentTarget.name}!`
+        appendToCombatLog(damageText, onKillText);
+
+    },
+    "Multi-Stab": (mpCost) => {
+        console.log("calc Multi-Stab fired");
+        for (let i = 0; i < 3; i++) {
+            let attackModded = randomPercentMod(currentTurn.atk, 15);
+            attackModded = Math.floor(attackModded * 0.66);
+            calcHpMpChanges("HP", attackModded, currentTarget);
+            let damageText = `${currentTurn.name} rapidly stabbed ${currentTarget.name} for ${attackModded} damage!`
+            $("#menu").prepend(($("<h5>").text(damageText)));
+        }
+        let onKillText = `${currentTurn.name} killed ${currentTarget.name}!`
+        if (currentTarget.hp.currentHp <= 0) {
+            $("#menu").prepend(($("<h5>").text(onKillText)));
+        }
+        calcHpMpChanges("MP", mpCost, currentTurn);
+    },
+    "Firebolt": (mpCost) => {
+        console.log("calc Firebolt fired");
+        let attackModded = randomPercentMod(currentTurn.atk, 15);
+        attackModded = attackModded*3;
+        calcHpMpChanges("HP", attackModded, currentTarget);
+        calcHpMpChanges("MP", mpCost, currentTurn);
+
+        let damageText = `${currentTurn.name} burned ${currentTarget.name} for ${attackModded} damage!`
+        let onKillText = `${currentTurn.name} incinerated ${currentTarget.name}!`
+        appendToCombatLog(damageText, onKillText);
+    },
+    "Brutal Strike": (mpCost) => {
+        console.log("calc Brutal Strike fired");
+        let attackModded = randomPercentMod(currentTurn.atk, 15);
+        attackModded = attackModded*2;
+        calcHpMpChanges("HP", attackModded, currentTarget);
+        calcHpMpChanges("MP", mpCost, currentTurn);
+
+        let damageText = `${currentTurn.name} savaged ${currentTarget.name} for ${attackModded} damage!`
+        let onKillText = `${currentTurn.name} tore into ${currentTarget.name}!`
+        appendToCombatLog(damageText, onKillText);
+    },
+
+    "Howl": (mpCost) => {
+        calcHpMpChanges("HP", -50, currentTurn);
+        calcHpMpChanges("MP", mpCost, currentTurn);
+        appendToCombatLog(`${currentTurn.name} healed himself for 50 HP!`);
+        updateGameState();
     }
 }
 
