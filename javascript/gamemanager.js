@@ -289,23 +289,21 @@ const targetUpdate = (e) => {
 calcHpMpChanges = (HpOrMp, valueToChangeBy, target) => {
     //! don't forget, positive valueToChange = deduction. That's normal.
     if (HpOrMp === "HP") {
+        target.hp.currentHp -= valueToChangeBy;
         if (valueToChangeBy >= 0) {
-            target.hp.currentHp -= valueToChangeBy;
             if (target.hp.currentHp <= 0) {target.hp.currentHp = 0};
         }
         else {
-            target.hp.currentHp -= valueToChangeBy;
             if (target.hp.currentHp >= target.hp.maxHp) {target.hp.currentHp = target.hp.maxHp};
         }
     }
     
     else if (HpOrMp === "MP") {
+        target.mp.currentMp -= valueToChangeBy;
         if (valueToChangeBy >= 0) {
-            target.mp.currentMp -= valueToChangeBy;
             if (target.mp.currentMp <= 0) {target.mp.currentMp = 0};
         }
         else {
-            target.mp.currentMp -= valueToChangeBy;
             if (target.mp.currentMp >= target.mp.maxMp) {target.mp.currentMp = target.mp.maxMp};
         } 
     }
