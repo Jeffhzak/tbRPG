@@ -8,8 +8,8 @@ class Warrior {
         this.atk = Math.floor(25 * Math.sqrt(lvl));
         this.spd = Math.floor(75 * Math.sqrt(lvl));
         this.skills = {
-            "Brutal Strike": () => {targetEnemyHighlightUpdate("Brutal Strike", 10)},
-            "Howl": () => {playerSkills["Howl"](20)}
+            "(10) Brutal Strike": () => {targetEnemyHighlightUpdate("Brutal Strike", 10)},
+            "(20) Howl": () => {playerSkills["Howl"](20)}
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -28,7 +28,7 @@ class Mage {
         this.atk = Math.floor(10 * Math.sqrt(lvl));
         this.spd = Math.floor(50 * Math.sqrt(lvl));
         this.skills = {
-            "Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
+            "(15) Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -47,9 +47,9 @@ class Thief {
         this.atk = Math.floor(20 * Math.sqrt(lvl));
         this.spd = Math.floor(100 * Math.sqrt(lvl));
         this.skills = {
-            "Steal Health": () => {targetEnemyHighlightUpdate("Steal Health", 10)},
+            "(10) Steal Health": () => {targetEnemyHighlightUpdate("Steal Health", 10)},
             // "Poison Strike": () => {targetEnemyHighlightUpdate("Poison Strike", )},
-            "Multi-Stab": () => {targetEnemyHighlightUpdate("Multi-Stab", 10)}
+            "(10) Multi-Stab": () => {targetEnemyHighlightUpdate("Multi-Stab", 10)}
         };
         this.Attack = (e) => {
             targetUpdate(e);

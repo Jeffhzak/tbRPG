@@ -265,7 +265,7 @@ const checkWinState = () => {
         if (players[x].hp.currentHp <= 0) {
             playerDeadCount++;
         }
-    }
+    } 
     for (x in enemies) {
         if (enemies[x].hp.currentHp <= 0) {
             enemyDeadCount++;
