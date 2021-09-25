@@ -114,20 +114,42 @@ const renderUI = () => {
     $uiCommands.append($skillButton);
     $uiCommands.append($itemButton);
     $uiCommands.append($runButton);
-    
+    disableAllTargeting();
 }
 
-const renderSkillsUI = (e) => {
+const renderSkillsUI = (event) => {
     const $newSkillsDiv = $("<div>").attr("class", "skillsdiv");
-    const $newBackButton = $("<button>").attr("class", "backbutton").text("x").on("click", unRenderSkillsUI);
-    const $skillButton = $(e.target);
+    disableAllUIButtons();
+    renderCancelButton();
+    const $skillButton = $(event.target);
     $skillButton.append($newSkillsDiv);
-    $skillButton.append($newBackButton);
-    $skillButton.off();
     for (key in currentTurn.skills) {
-        const $newSkill = $("<div>").text(key).on("click", currentTurn.skills[key]).on("click", renderUI).addClass("skillbox");
+        const $newSkill = $("<div>").text(key).on("click", renderUI).on("click", currentTurn.skills[key]).on("click", renderCancelButton).addClass("skillbox");
         $newSkillsDiv.append($newSkill);
     }
+}
+
+const renderCancelButton = () => {
+    const $buttonContainer = $("#uicommands");
+    const $newBackButton = $("<button>").attr("class", "backbutton").text("x").on("click", renderUI);
+    $buttonContainer.append($newBackButton);
+}
+
+const disableAllUIButtons = () => {
+    const $buttonContainer = $("#uicommands");
+    $buttonContainer.children().off();
+}
+
+const disableAllTargeting = () => {
+    for (objectKey in enemies) {
+        $(`#${objectKey}`).off();
+        $(`#${objectKey}`).removeClass("infocus");
+    }
+    for (objectKey in players) {
+        $(`#${objectKey}`).off();
+        $(`#${objectKey}`).removeClass("infocus");
+    }
+    $(currentTurn.displayElement).addClass("infocus");
 }
 
 const unRenderSkillsUI = () => {
@@ -199,39 +221,46 @@ const updateGameState = () => {
     }, 400)
 }
 
+const rollForInitiative = (players, enemies) => {
+    
+    for (const x in players) {
+        const currentplayer = players[x];
+        const isAlive = (currentplayer) => {return currentplayer.hp.currentHp > 0};
+        if (isAlive(currentplayer)) { // push players that aren't dead into the turnOrder array
+            turnOrder.push(currentplayer);
+        }
+    }
+    for (const x in enemies) {
+        if (enemies[x].hp.currentHp > 0) {// push monsters that aren't dead into the turnOrder array
+            const currentEnemy = enemies[x];
+            turnOrder.push(currentEnemy);
+            currentEnemy.aiTarget();
+            if (currentEnemy.target.name != null) {
+                // console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
+                $enemyTargetText = $("<h5>").text(`${currentEnemy.name} is looking at ${currentEnemy.target.name}...`);
+                $("#menu").prepend($enemyTargetText);
+            }
+        }
+    }
+    //sort turnOrder array by speed, lowest to highest
+    //speed +/- 15% for some variance
+    turnOrder.sort( (a, b) => {
+        let moddedSpeedA = randomPercentMod(a.spd, 15);
+        let moddedSpeedB = randomPercentMod(b.spd, 15)
+        if (moddedSpeedA > moddedSpeedB) {return 1}
+        else if (moddedSpeedA < moddedSpeedB) {return -1}
+        else return 0;
+    })
+    
+
+}
+
 const updateTurnOrder = (players, enemies) => {
-    if (turnOrder.length === 0) { // if the round isnt over yet...
-        for (const x in players) {
-            const currentplayer = players[x];
-            const isAlive = (currentplayer) => {return currentplayer.hp.currentHp > 0};
-            if (isAlive(currentplayer)) { // push players that aren't dead into the turnOrder array
-                turnOrder.push(currentplayer);
-            }
-        }
-        for (const x in enemies) {
-            if (enemies[x].hp.currentHp > 0) {// push monsters that aren't dead into the turnOrder array
-                const currentEnemy = enemies[x];
-                turnOrder.push(currentEnemy);
-                currentEnemy.aiTarget();
-                if (currentEnemy.target.name != null) {
-                    // console.log(`${enemies[x].name} is looking at ${enemies[x].target.name}...`);
-                    $enemyTargetText = $("<h5>").text(`${currentEnemy.name} is looking at ${currentEnemy.target.name}...`);
-                    $("#menu").prepend($enemyTargetText);
-                }
-            }
-        }
-        //sort turnOrder array by speed, lowest to highest
-        //speed +/- 15% for some variance
-        turnOrder.sort( (a, b) => {
-            let moddedSpeedA = randomPercentMod(a.spd, 15);
-            let moddedSpeedB = randomPercentMod(b.spd, 15)
-            if (moddedSpeedA > moddedSpeedB) {return 1}
-            else if (moddedSpeedA < moddedSpeedB) {return -1}
-            else return 0;
-        })
+    if (turnOrder.length === 0) { // if the round is over...
+        rollForInitiative(players, enemies);
     }
     // before the next guy can take their turn, check for dead people
-    checkDeaths();
+    killDeadTurnOrder();
     // progress turn order
     // console.log(turnOrder);
     currentTurn = turnOrder.pop();
@@ -246,7 +275,7 @@ const updateTurnOrder = (players, enemies) => {
 }
 
 
-const checkDeaths = () => {
+const killDeadTurnOrder = () => {
 //removes dead characters from turn order immediately
     for (x in turnOrder) {
         // console.log(`for-in ${x}`);

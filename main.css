@@ -244,7 +244,7 @@ button {
                         position: absolute;
                         width: 3vh;
                         background-color: var(--orange);
-                        bottom: 13vh;
+                        z-index: 2;
                     }
                     .backbutton:hover {
                         background-color: var(--greyish);
@@ -267,9 +267,14 @@ button {
                             .skillsdiv:hover {
                                 filter: none;
                             }
-                            .skillbox:hover {
-                                background-color: var(--orange);
+                            .skillbox {
+                                border: 1px solid var(--orange);
+                                text-align: left;
+                                padding: 0px 5px 0px 5px;
                             }
+                                .skillbox:hover {
+                                    background-color: var(--orange);
+                                }
             .partymemberdiv {
                 height:30%;
                 display: flex;
