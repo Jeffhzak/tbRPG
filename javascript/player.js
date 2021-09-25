@@ -70,8 +70,13 @@ class Thief {
 const targetEnemyHighlightUpdate = (skillName, mpCost) => {
     for (objectKey in enemies) {
         $(`#${objectKey}`).on("click", skillUse(skillName, mpCost));
+        $(`#${objectKey}`).on("click", enemyClickOffCallback(`#${objectKey}`));
         $(`#${objectKey}`).addClass("infocus");
     }
+}
+
+enemyClickOffCallback = (targetDivName) => () => {
+    $(targetDivName).off();
 }
 
 //searches PlayerSkills Object to fire the right skill function
@@ -88,9 +93,10 @@ const skillUse = (skillName, mpCost) => (e) => {
 }
 
 const basicAttack = () => {
-    for (x in enemies) {
-        $(`#${x}`).on("click", currentTurn.Attack);
-        $(`#${x}`).addClass("infocus");
+    for (objectKey in enemies) {
+        $(`#${objectKey}`).on("click", currentTurn.Attack);
+        $(`#${objectKey}`).on("click", enemyClickOffCallback(`#${objectKey}`));
+        $(`#${objectKey}`).addClass("infocus");
     }
     disableAllUIButtons();
     renderCancelButton();
