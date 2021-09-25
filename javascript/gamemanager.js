@@ -57,12 +57,19 @@ const renderWebsite = () => {
     $overAllBackground.append($menu).append($mainInterface).append($turnOrder);
 
     $body.append($overAllBackground);
+
+    //! ---> audio elements defined here
+    const $battleMusic = $("<audio>").addClass("battlemusic").attr("src", "./music/Battle-1.mp3").prop("volume", 0.1);
+    $body.append($battleMusic);
+    const $winMusic = $("<audio>").addClass("winmusic").attr("src", "./music/victory-1.mp3").prop("volume", 0.1);
+    $body.append($winMusic);
+
     //! --->  start at x difficulty here
     
-    const $startButton = $("<button>").on("click", startGame(difficulty.easy)).text("Easy").addClass("startgamebutton");
-    const $startButton1 = $("<button>").on("click", startGame(difficulty.normal)).text("Normal").addClass("startgamebutton");
-    const $startButton2 = $("<button>").on("click", startGame(difficulty.hard)).text("Hard").addClass("startgamebutton");
-    const $startbutton3 = $("<button>").on("click", startGame(difficulty.die)).text("Insane").addClass("startgamebutton");
+    const $startButton = $("<button>").on("click", startGame(difficulty.easy)).text("Easy").addClass("startgamebutton").on("click", () => {$battleMusic.get(0).play()});
+    const $startButton1 = $("<button>").on("click", startGame(difficulty.normal)).text("Normal").addClass("startgamebutton").on("click", () => {$battleMusic.get(0).play()});
+    const $startButton2 = $("<button>").on("click", startGame(difficulty.hard)).text("Hard").addClass("startgamebutton").on("click", () => {$battleMusic.get(0).play()});
+    const $startbutton3 = $("<button>").on("click", startGame(difficulty.die)).text("Insane").addClass("startgamebutton").on("click", () => {$battleMusic.get(0).play()});
     $mainInterface.append($startButton);
     $mainInterface.append($startButton1);
     $mainInterface.append($startButton2);
@@ -171,14 +178,25 @@ const damageAllEnemies = (damageToApply) => {
 }
 
 const renderWinState = () => {
+    //! ---> music
+    const $battleMusic = $(".battlemusic");
+    $battleMusic.get(0).pause();
+    const $winMusic = $(".winmusic");
+    $winMusic.get(0).play();
+    
     const $background = $("#background");
     $background.empty();
     $background.append($("<h1>").text("YOU WIN!").css("color", "white"));
     $tryAgainButton = $("<button>").text("Go again!").on("click", renderWebsite).addClass("startgamebutton");
     $background.append($tryAgainButton);
+    
 }
 
 const renderLoseState = () => {
+    //! ---> music
+    const $battleMusic = $(".battlemusic");
+    $battleMusic.get(0).pause();
+
     const $background = $("#background");
     $background.empty();
     $background.append($("<h1>").text("YOU LOSE!").css("color", "white"))
