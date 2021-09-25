@@ -82,6 +82,7 @@ const startGame = (diff) => () => {
     renderParty();
     renderMonsters();
     renderUI();
+    turnOrder = [];
     updateTurnOrder(players, enemies);
     renderTurnOrder();
 }
@@ -124,8 +125,19 @@ const renderSkillsUI = (event) => {
     const $skillButton = $(event.target);
     $skillButton.append($newSkillsDiv);
     for (key in currentTurn.skills) {
-        const $newSkill = $("<div>").text(key).on("click", renderUI).on("click", currentTurn.skills[key]).on("click", renderCancelButton).addClass("skillbox");
-        $newSkillsDiv.append($newSkill);
+
+        let newTxt = key.split(')');
+        let newTxt2 = newTxt[0].split('(');
+        mpCost = parseInt(newTxt2[1], 10);
+
+        if (currentTurn.mp.currentMp < mpCost) {
+            const $newSkill = $("<div>").text(key).addClass("skillbox").css("color", "grey");
+            $newSkillsDiv.append($newSkill);
+        }
+        else {
+            const $newSkill = $("<div>").text(key).on("click", renderUI).on("click", currentTurn.skills[key]).on("click", renderCancelButton).addClass("skillbox");
+            $newSkillsDiv.append($newSkill);
+        }
     }
 }
 

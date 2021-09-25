@@ -148,7 +148,7 @@ const playerSkills = {
     },
     "Arcane Wave": (mpCost) => {
         let attackModded = randomPercentMod(currentTurn.atk, 15);
-        attackModded = attackModded*2;
+        attackModded = attackModded*3;
         damageAllEnemies(attackModded);
         calcHpMpChanges("MP", mpCost, currentTurn);
 
