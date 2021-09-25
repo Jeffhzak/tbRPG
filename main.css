@@ -244,10 +244,12 @@ button {
                         position: absolute;
                         width: 3vh;
                         background-color: var(--orange);
+                        filter: drop-shadow(0 0 5px black);
                         z-index: 2;
                     }
                     .backbutton:hover {
                         background-color: var(--greyish);
+                        filter: drop-shadow(0 0 5px black);
                     }
                     #uibuttonsskills {
                        z-index: 1;
@@ -263,9 +265,11 @@ button {
                             border-radius: 1%;
                             color: black;
                             font-family: 'Roboto', sans-serif;
+                            filter: drop-shadow(0 0 5px black);
                         }
                             .skillsdiv:hover {
                                 filter: none;
+                                filter: drop-shadow(0 0 5px black);
                             }
                             .skillbox {
                                 border: 1px solid var(--orange);
