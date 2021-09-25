@@ -152,11 +152,11 @@ const disableAllTargeting = () => {
     $(currentTurn.displayElement).addClass("infocus");
 }
 
-const unRenderSkillsUI = () => {
-    $("#uibuttonsskills").empty();
-    $("#uibuttonsskills").text("Skill").on("click", renderSkillsUI);
+const damageAllEnemies = (damageToApply) => {
+    for (objectKey in enemies) {
+        calcHpMpChanges("HP", damageToApply, enemies[objectKey]);
+    }
 }
-
 
 const renderWinState = () => {
     const $background = $("#background");
@@ -217,6 +217,7 @@ const updateGameState = () => {
             renderMonsters();
             updateTurnOrder(players, enemies);
             renderTurnOrder();
+            renderUI();
         }
     }, 400)
 }
@@ -266,7 +267,7 @@ const updateTurnOrder = (players, enemies) => {
     currentTurn = turnOrder.pop();
     // if it's the player's turn, highlight them
     if (currentTurn === players.warrior || currentTurn === players.mage || currentTurn === players.thief) {
-        $(currentTurn.displayElement).toggleClass("infocus");
+        $(currentTurn.displayElement).addClass("infocus");
     } else { //! if it's not the player's turn, fire off the monster's turn
         randomMonsterSkill(currentTurn);
         updateGameState();

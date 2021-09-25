@@ -28,7 +28,11 @@ class Mage {
         this.atk = Math.floor(10 * Math.sqrt(lvl));
         this.spd = Math.floor(50 * Math.sqrt(lvl));
         this.skills = {
-            "(15) Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
+            "(15) Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)},
+            "(25) Arcane Wave": () => {
+                playerSkills["Arcane Wave"](25);
+                updateGameState();
+            },
         };
         this.Attack = (e) => {
             targetUpdate(e);
@@ -66,7 +70,7 @@ class Thief {
 const targetEnemyHighlightUpdate = (skillName, mpCost) => {
     for (objectKey in enemies) {
         $(`#${objectKey}`).on("click", skillUse(skillName, mpCost));
-        $(`#${objectKey}`).toggleClass("infocus");
+        $(`#${objectKey}`).addClass("infocus");
     }
 }
 
@@ -86,7 +90,7 @@ const skillUse = (skillName, mpCost) => (e) => {
 const basicAttack = () => {
     for (x in enemies) {
         $(`#${x}`).on("click", currentTurn.Attack);
-        $(`#${x}`).toggleClass("infocus");
+        $(`#${x}`).addClass("infocus");
     }
     disableAllUIButtons();
     renderCancelButton();
@@ -140,6 +144,16 @@ const playerSkills = {
 
         let damageText = `${currentTurn.name} burned ${currentTarget.name} for ${attackModded} damage!`
         let onKillText = `${currentTurn.name} incinerated ${currentTarget.name}!`
+        appendToCombatLog(damageText, onKillText);
+    },
+    "Arcane Wave": (mpCost) => {
+        let attackModded = randomPercentMod(currentTurn.atk, 15);
+        attackModded = attackModded*2;
+        damageAllEnemies(attackModded);
+        calcHpMpChanges("MP", mpCost, currentTurn);
+
+        let damageText = `${currentTurn.name} blasted all enemies for ${attackModded} damage!`
+        let onKillText = `${currentTurn.name} destroyed ${currentTarget.name}!`
         appendToCombatLog(damageText, onKillText);
     },
     "Brutal Strike": (mpCost) => {
