@@ -28,15 +28,11 @@ class Mage {
         this.atk = Math.floor(10 * Math.sqrt(lvl));
         this.spd = Math.floor(50 * Math.sqrt(lvl));
         this.skills = {
-<<<<<<< HEAD
             "(15) Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)},
             "(25) Arcane Wave": () => {
                 playerSkills["Arcane Wave"](25);
                 updateGameState();
             },
-=======
-            "(15) Firebolt": () => {targetEnemyHighlightUpdate("Firebolt", 15)}
->>>>>>> 7ec870169e4e5369bef380d836fa3fb1bf8c7223
         };
         this.Attack = (e) => {
             targetUpdate(e);
